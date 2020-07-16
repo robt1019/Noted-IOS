@@ -11,8 +11,10 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var message = ""
+    @State private var savedMessage = ""
     @State private var textStyle = UIFont.TextStyle.body
     @State private var username = "robt1019"
+    @State public var timer: Timer? = nil
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -27,6 +29,14 @@ struct ContentView: View {
             .padding()
         }.onAppear {
             self.getNotes()
+            self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
+                if self.savedMessage == self.message {
+                    self.getNotes()
+                }
+            }
+        }.onDisappear {
+            self.saveNotes()
+            self.timer?.invalidate()
         }
     }
     
@@ -39,6 +49,7 @@ struct ContentView: View {
             if let json = try? JSONSerialization.jsonObject(with: data!, options: []) {
                 let jsonDict = json as? NSDictionary
                 self.message = jsonDict?["content"] as! String
+                self.savedMessage = self.message
             }
         })
         
@@ -62,6 +73,7 @@ struct ContentView: View {
         let jsonData = try! JSONSerialization.data(withJSONObject: json, options: [])
         
         let task = session.uploadTask(with: request, from: Data(jsonData)) { data, response, error in
+            self.getNotes()
         }
         
         task.resume()

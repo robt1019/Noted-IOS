@@ -14,15 +14,13 @@ struct TextView: UIViewRepresentable {
     @Binding var textStyle: UIFont.TextStyle
     
     func makeUIView(context: Context) -> UITextView {
-        let textView = UITextView()
-        
-        textView.delegate = context.coordinator
-        textView.font = UIFont.preferredFont(forTextStyle: textStyle)
-        textView.autocapitalizationType = .sentences
-        textView.isSelectable = true
-        textView.isUserInteractionEnabled = true
-        
-        return textView
+        let view = UITextView()
+        view.isScrollEnabled = true
+        view.isEditable = true
+        view.isUserInteractionEnabled = true
+        view.contentInset = UIEdgeInsets(top: 5,
+            left: 10, bottom: 5, right: 5)
+        return view
     }
     
     func updateUIView(_ uiView: UITextView, context: Context) {
