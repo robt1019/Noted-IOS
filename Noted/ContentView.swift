@@ -12,6 +12,7 @@ struct ContentView: View {
     
     @State private var message = ""
     @State private var textStyle = UIFont.TextStyle.body
+    @State private var username = "robt1019"
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
@@ -31,7 +32,7 @@ struct ContentView: View {
     
     func getNotes() {
         let session = URLSession.shared
-        let url = URL(string: "https://glacial-badlands-85832.herokuapp.com/notes")!
+        let url = URL(string: "https://glacial-badlands-85832.herokuapp.com/notes/" + username)!
         
         let task = session.dataTask(with: url, completionHandler: { data, response, error in
             
@@ -46,10 +47,10 @@ struct ContentView: View {
     
     func saveNotes() {
         let session = URLSession.shared
-        let url = URL(string: "https://glacial-badlands-85832.herokuapp.com/notes")!
+        let url = URL(string: "https://glacial-badlands-85832.herokuapp.com/notes/" + self.username)!
         
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.httpMethod = "PUT"
         
         request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
         
