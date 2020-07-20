@@ -15,7 +15,8 @@ struct TextView: UIViewRepresentable {
     
     func makeUIView(context: Context) -> UITextView {
         let view = UITextView()
-        view.isScrollEnabled = true
+        view.delegate = context.coordinator
+        view.isScrollEnabled = false
         view.isEditable = true
         view.isUserInteractionEnabled = true
         view.contentInset = UIEdgeInsets(top: 5,
@@ -29,18 +30,18 @@ struct TextView: UIViewRepresentable {
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator($text)
+        Coordinator(self)
     }
     
     class Coordinator: NSObject, UITextViewDelegate {
-        var text: Binding<String>
+        var control: TextView
 
-        init(_ text: Binding<String>) {
-            self.text = text
+        init(_ control: TextView) {
+            self.control = control
         }
-        
+
         func textViewDidChange(_ textView: UITextView) {
-            self.text.wrappedValue = textView.text
+            control.text = textView.text
         }
     }
 }
