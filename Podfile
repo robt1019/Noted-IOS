@@ -6,7 +6,7 @@ target 'Noted' do
   use_frameworks!
 
   # Pods for Noted
-  pod 'Auth0', '~> 1.0'
+  pod 'Auth0', '~> 1.27.0'
   pod 'Socket.IO-Client-Swift', '~> 15.2.0'
 
 end
