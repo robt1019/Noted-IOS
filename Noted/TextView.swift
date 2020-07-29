@@ -19,12 +19,15 @@ struct TextView: UIViewRepresentable {
         view.isEditable = true
         view.isUserInteractionEnabled = true
         view.showsVerticalScrollIndicator = false
-        view.contentInset = UIEdgeInsets(top: 10,
-            left: 5, bottom: 10, right: 5)
         return view
     }
     
     func updateUIView(_ uiView: UITextView, context: Context) {
+        if let selectedRange = uiView.selectedTextRange {
+            uiView.text = text
+            uiView.selectedTextRange = uiView.textRange(from: selectedRange.start, to: selectedRange.start)
+            return
+        }
         uiView.text = text
     }
     
@@ -34,11 +37,11 @@ struct TextView: UIViewRepresentable {
     
     class Coordinator: NSObject, UITextViewDelegate {
         var control: TextView
-
+        
         init(_ control: TextView) {
             self.control = control
         }
-
+        
         func textViewDidChange(_ textView: UITextView) {
             control.text = textView.text
         }

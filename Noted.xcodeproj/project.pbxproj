@@ -11,6 +11,7 @@
 		EC6C9BEF24D082AF00F45386 /* NotesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6C9BEE24D082AF00F45386 /* NotesService.swift */; };
 		EC6C9BF124D08CD000F45386 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6C9BF024D08CD000F45386 /* AuthService.swift */; };
 		EC8424F124C5A70000E061C0 /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC8424F024C5A70000E061C0 /* Auth0.plist */; };
+		ECC32C6A24D1D6A3004800B5 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC32C6924D1D6A3004800B5 /* KeyboardResponder.swift */; };
 		ECC79A9824C0603E00B54B6E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC79A9724C0603E00B54B6E /* AppDelegate.swift */; };
 		ECC79A9A24C0603E00B54B6E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC79A9924C0603E00B54B6E /* SceneDelegate.swift */; };
 		ECC79A9C24C0603E00B54B6E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC79A9B24C0603E00B54B6E /* ContentView.swift */; };
@@ -26,6 +27,7 @@
 		EC6C9BEE24D082AF00F45386 /* NotesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesService.swift; sourceTree = "<group>"; };
 		EC6C9BF024D08CD000F45386 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		EC8424F024C5A70000E061C0 /* Auth0.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Auth0.plist; sourceTree = "<group>"; };
+		ECC32C6924D1D6A3004800B5 /* KeyboardResponder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		ECC79A9424C0603E00B54B6E /* Noted.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Noted.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ECC79A9724C0603E00B54B6E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ECC79A9924C0603E00B54B6E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 				EC8424F024C5A70000E061C0 /* Auth0.plist */,
 				EC6C9BEE24D082AF00F45386 /* NotesService.swift */,
 				EC6C9BF024D08CD000F45386 /* AuthService.swift */,
+				ECC32C6924D1D6A3004800B5 /* KeyboardResponder.swift */,
 			);
 			path = Noted;
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 			files = (
 				ECC79A9824C0603E00B54B6E /* AppDelegate.swift in Sources */,
 				ECC79AAC24C0625900B54B6E /* TextView.swift in Sources */,
+				ECC32C6A24D1D6A3004800B5 /* KeyboardResponder.swift in Sources */,
 				ECC79A9A24C0603E00B54B6E /* SceneDelegate.swift in Sources */,
 				EC6C9BF124D08CD000F45386 /* AuthService.swift in Sources */,
 				EC6C9BEF24D082AF00F45386 /* NotesService.swift in Sources */,
