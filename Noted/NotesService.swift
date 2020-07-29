@@ -11,11 +11,9 @@ import SocketIO
 
 open class NotesService {
     
-    public static let `default` = NotesService()
-
     private let socketManager: SocketManager
     private let socket: SocketIOClient
-        
+    
     
     private var onNotesUpdated: ((String) -> Void)? = nil
     
@@ -44,25 +42,25 @@ open class NotesService {
         print("trying to connect to socket")
         
         self.socket.connect()
-            
+        
+        self.socket.on("notesUpdated") {data, ack in
+            print("notes received")
+            let jsonDict = data[0] as? NSDictionary
+            let newNotes = jsonDict?["content"] as! String
+            self.onNotesUpdated!(newNotes)
+        }
+        
         self.socket.on(clientEvent: .connect) {data, ack in
             print("socket connected")
-            self.socket.emit("authenticate", ["token": token])
+            
+            AuthService.getAccessToken { token in
+                self.socket.emit("authenticate", ["token": token])
+            }
+
             print("authenticating")
             
-            self.socket.on("authenticated", callback: { _, _ in
+            self.socket.once("authenticated", callback: { _, _ in
                 print("authenticated")
-                // use the socket as usual
-                self.socket.on("notesUpdated") {data, ack in
-                    print("notes received")
-                    let jsonDict = data[0] as? NSDictionary
-                    let newNotes = jsonDict?["content"] as! String
-                    self.onNotesUpdated!(newNotes)
-                }
-                
-                self.socket.onAny ({thing in
-                    print(thing)
-                })
             });
             
             
@@ -79,5 +77,5 @@ open class NotesService {
         }
         
     }
-
+    
 }

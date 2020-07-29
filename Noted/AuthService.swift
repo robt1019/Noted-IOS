@@ -10,6 +10,7 @@ import Foundation
 import Auth0
 
 class AuthService {
+    
     static func login(onSuccess: @escaping (Credentials) -> Void, onFailure: @escaping () -> Void) {
         print("logging in")
         Auth0
@@ -27,6 +28,53 @@ class AuthService {
                     print("logged in")
                     onSuccess(credentials)
                 }
+        }
+    }
+    
+    static func logout() {
+        let credentialsManager = CredentialsManager(authentication: Auth0.authentication())
+        credentialsManager.clear()
+        Auth0
+            .webAuth()
+            .clearSession(federated:false) {
+                switch $0 {
+                case true:
+                    print("logged out")
+                case false:
+                    print("oh noes. Could not log out")
+                }
+        }
+    }
+    
+    static func getAccessToken(accessTokenFound: @escaping (String) -> Void) {
+        let credentialsManager = CredentialsManager(authentication: Auth0.authentication())
+        if(credentialsManager.hasValid()) {
+            credentialsManager.credentials(callback: {err, credentials in
+                if(err != nil) {
+                    print("problem with credentials manager")
+                    print(err)
+                    login(onSuccess: {  credentials in
+                        print("storing creds")
+                        credentialsManager.store(credentials: credentials)
+                        accessTokenFound(credentials.accessToken!)
+                    }, onFailure: {
+                        print("whoopsie")
+                    })
+                } else {
+                    print("using stored credentials")
+                    accessTokenFound((credentials?.accessToken)!)
+                }
+            })
+        } else {
+            print("no credentials stored")
+            let credentialsManager = CredentialsManager(authentication: Auth0.authentication())
+            login(onSuccess: {  credentials in
+                print("storing creds")
+                credentialsManager.store(credentials: credentials)
+                accessTokenFound(credentials.accessToken!)
+            }, onFailure: {
+                print("whoopsie")
+            })
         }
     }
 }
