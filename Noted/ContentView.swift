@@ -15,49 +15,80 @@ struct ContentView: View {
     @State private var message = ""
     private let notes = NotesService()
     @ObservedObject private var keyboard = KeyboardResponder()
+    @State private var loggedIn = false
+    @State private var logoutAlertIsVisible = false
     
     var body: some View {
-        VStack (alignment: .trailing) {
-            HStack(spacing: 10) {
-                Button(action: {
-                    self.closeKeyboard()
-                    self.notes.saveNotes(notes: self.message)
-                }) {
-                    Text("Save")
-                }
-                NavigationLink(destination: Text("Logout")) {
-                    /*@START_MENU_TOKEN@*/ /*@PLACEHOLDER=Label Content@*/Text("Logout")/*@END_MENU_TOKEN@*/
-                }
-            }.padding()
-            NavigationView {
-                TextView(text: $message)
-                    .padding(.horizontal)
-                    .navigationBarTitle("")
-                    .navigationBarHidden(true)
-            }
-            .padding()
-            .frame(maxHeight: .infinity)
-            .onAppear {
-                self.notes.on(event: "notesUpdated", callback: {
-                    notes in
-                    print("got some updated notes")
-                    self.message = notes
-                })
-                Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: {
-                    _ in
-                    AuthService.getAccessToken { token in
-                        self.notes.connectToSocket(token: token)
+        VStack {
+            if self.loggedIn {
+                VStack (alignment: .trailing) {
+                    HStack(spacing: 10) {
+                        Button(action: {
+                            self.closeKeyboard()
+                            self.notes.saveNotes(notes: self.message)
+                        }) {
+                            Text("Save")
+                        }
+                        Button(action: {
+                            self.logoutAlertIsVisible = true
+                        }) {
+                            Text("Logout")
+                        }.alert(isPresented: $logoutAlertIsVisible) {() ->
+                            Alert in
+                            return Alert(title: Text("Logout"), message: Text("Press continue on the next prompt to log out"), dismissButton: .default(Text("OK")){
+                                AuthService.logout(loggedOut: {
+                                    self.loggedIn = false
+                                }, failed: {
+                                    self.loggedIn = true
+                                })
+                                })
+                        }
+                    }.padding()
+                    TextView(text: $message)
+                        .padding(.horizontal)
+                        .padding()
+                        .frame(maxHeight: .infinity)
+                        .onAppear {
+                            self.notes.on(event: "notesUpdated", callback: {
+                                notes in
+                                print("got some updated notes")
+                                self.message = notes
+                            })
+                    }.onDisappear {
+                        print("disappearing")
+                        self.notes.saveNotes(notes: self.message)
                     }
-                })
-            }.onDisappear {
-                print("disappearing")
-                self.notes.saveNotes(notes: self.message)
+                }.padding()
+                    .padding(.bottom, keyboard.currentHeight)
+                    .edgesIgnoringSafeArea(.bottom)
+                    .animation(.easeOut(duration: 0.16))
+            } else {
+                Button(action: {
+                    AuthService.getAccessToken(accessTokenFound: {token in
+                        self.notes.connectToSocket(token: token)
+                        self.loggedIn = true
+                    }, noAccessToken: {
+                        self.loggedIn = false
+                    })
+                }) {
+                    Text("Login")
+                }
             }
-        }.padding()
-        .padding(.bottom, keyboard.currentHeight)
-        .edgesIgnoringSafeArea(.bottom)
-        .animation(.easeOut(duration: 0.16))
-        
+        }
+        .onAppear() {
+            Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: {_ in
+                print("trying to figure out logged in status")
+                AuthService.getAccessToken(accessTokenFound: {
+                    token in
+                    print("logged in!")
+                    self.notes.connectToSocket(token: token)
+                    self.loggedIn = true
+                }, noAccessToken: {
+                    print("logged out!")
+                    self.loggedIn = false
+                })
+            })
+        }
     }
     
     func closeKeyboard() {

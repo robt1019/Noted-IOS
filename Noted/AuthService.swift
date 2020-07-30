@@ -31,7 +31,7 @@ class AuthService {
         }
     }
     
-    static func logout() {
+    static func logout(loggedOut: @escaping () -> Void, failed: @escaping () -> Void) {
         let credentialsManager = CredentialsManager(authentication: Auth0.authentication())
         credentialsManager.clear()
         Auth0
@@ -40,13 +40,15 @@ class AuthService {
                 switch $0 {
                 case true:
                     print("logged out")
+                    loggedOut()
                 case false:
                     print("oh noes. Could not log out")
+                    failed()
                 }
         }
     }
     
-    static func getAccessToken(accessTokenFound: @escaping (String) -> Void) {
+    static func getAccessToken(accessTokenFound: @escaping (String) -> Void, noAccessToken: @escaping () -> Void) {
         let credentialsManager = CredentialsManager(authentication: Auth0.authentication())
         if(credentialsManager.hasValid()) {
             credentialsManager.credentials(callback: {err, credentials in
@@ -58,7 +60,7 @@ class AuthService {
                         credentialsManager.store(credentials: credentials)
                         accessTokenFound(credentials.accessToken!)
                     }, onFailure: {
-                        print("whoopsie")
+                        noAccessToken()
                     })
                 } else {
                     print("using stored credentials")

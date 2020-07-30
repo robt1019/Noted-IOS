@@ -53,11 +53,12 @@ open class NotesService {
         self.socket.on(clientEvent: .connect) {data, ack in
             print("socket connected")
             
-            AuthService.getAccessToken { token in
+            AuthService.getAccessToken (accessTokenFound: { token in
                 self.socket.emit("authenticate", ["token": token])
-            }
-
-            print("authenticating")
+                print("authenticating")
+            }, noAccessToken: {
+                print("authentication failed")
+            })
             
             self.socket.once("authenticated", callback: { _, _ in
                 print("authenticated")
