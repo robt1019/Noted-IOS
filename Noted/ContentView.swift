@@ -37,6 +37,7 @@ struct ContentView: View {
                             Alert in
                             return Alert(title: Text("Logout"), message: Text("Press continue on the next prompt to log out"), dismissButton: .default(Text("OK")){
                                 AuthService.logout(loggedOut: {
+                                    self.message = ""
                                     self.loggedIn = false
                                 }, failed: {
                                     self.loggedIn = true
@@ -47,6 +48,7 @@ struct ContentView: View {
                     TextView(text: $message)
                         .frame(maxHeight: .infinity)
                         .onAppear {
+                            print("appearing")
                             self.notes.on(event: "notesUpdated", callback: {
                                 notes in
                                 print("got some updated notes")
