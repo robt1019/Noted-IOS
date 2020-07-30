@@ -19,6 +19,7 @@ struct TextView: UIViewRepresentable {
         view.isEditable = true
         view.isUserInteractionEnabled = true
         view.showsVerticalScrollIndicator = false
+        view.font = UIFont.systemFont(ofSize: 15.0)
         return view
     }
     
@@ -26,6 +27,7 @@ struct TextView: UIViewRepresentable {
         if let selectedRange = uiView.selectedTextRange {
             uiView.text = text
             uiView.selectedTextRange = uiView.textRange(from: selectedRange.start, to: selectedRange.start)
+            uiView.scrollRangeToVisible(uiView.selectedRange)
             return
         }
         uiView.text = text

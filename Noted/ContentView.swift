@@ -45,8 +45,6 @@ struct ContentView: View {
                         }
                     }.padding()
                     TextView(text: $message)
-                        .padding(.horizontal)
-                        .padding()
                         .frame(maxHeight: .infinity)
                         .onAppear {
                             self.notes.on(event: "notesUpdated", callback: {
@@ -58,10 +56,10 @@ struct ContentView: View {
                         print("disappearing")
                         self.notes.saveNotes(notes: self.message)
                     }
-                }.padding()
-                    .padding(.bottom, keyboard.currentHeight)
-                    .edgesIgnoringSafeArea(.bottom)
-                    .animation(.easeOut(duration: 0.16))
+                }
+                .padding(.bottom, keyboard.currentHeight)
+                .edgesIgnoringSafeArea(.bottom)
+                .animation(.easeOut(duration: 0.16))
             } else {
                 Button(action: {
                     AuthService.getAccessToken(accessTokenFound: {token in
