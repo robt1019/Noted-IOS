@@ -62,6 +62,12 @@ open class NotesService {
             
             self.socket?.once("authenticated", callback: { _, _ in
                 print("authenticated")
+                self.socket?.once("initialNotes") {data, ack in
+                    print("initial notes received")
+                    let jsonDict = data[0] as? NSDictionary
+                    let newNotes = jsonDict?["content"] as! String
+                    self.onNotesUpdated!(newNotes)
+                }
             });
             
             

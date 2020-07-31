@@ -54,11 +54,9 @@ struct ContentView: View {
                                 print("got some updated notes")
                                 self.message = notes
                             })
-                    }.onDisappear {
-                        print("disappearing")
-                        self.notes.saveNotes(notes: self.message)
                     }
                 }
+                .padding()
                 .padding(.bottom, keyboard.currentHeight)
                 .edgesIgnoringSafeArea(.bottom)
                 .animation(.easeOut(duration: 0.16))
