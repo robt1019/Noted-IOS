@@ -9,6 +9,7 @@
 import SwiftUI
 import Auth0
 import JWTDecode
+import Network
 
 struct ContentView: View {
     
@@ -19,6 +20,8 @@ struct ContentView: View {
     @State private var loggedIn = false
     @State private var logoutAlertIsVisible = false
     @State private var currentNotes: String = ""
+    @State private var online = false
+    private let monitor = NWPathMonitor()
     
     var body: some View {
         VStack {
@@ -67,6 +70,7 @@ struct ContentView: View {
                                     self.currentNotes = notes
                                 }
                             })
+
                     }
                 }
                 .padding()
@@ -87,23 +91,42 @@ struct ContentView: View {
             }
         }
         .onAppear() {
-            Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: {_ in
-                print("trying to figure out logged in status")
-                AuthService.getAccessToken(accessTokenFound: {
-                    token in
-                    print("logged in!")
-                    self.notes.connectToSocket(token: token)
-                    self.loggedIn = true
-                }, noAccessToken: {
-                    print("logged out!")
-                    self.loggedIn = false
-                })
-            })
+            self.monitorOnlineStatus()
+            self.determineIfLoggedIn()
         }
     }
     
     func closeKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+    
+    func determineIfLoggedIn() {
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: {_ in
+            print("trying to figure out logged in status")
+            AuthService.getAccessToken(accessTokenFound: {
+                token in
+                print("logged in!")
+                self.notes.connectToSocket(token: token)
+                self.loggedIn = true
+            }, noAccessToken: {
+                print("logged out!")
+                self.loggedIn = false
+            })
+        })
+    }
+    
+    func monitorOnlineStatus() {
+        self.monitor.pathUpdateHandler = { path in
+            if(path.status == .satisfied) {
+                print("online")
+                self.online = true
+            } else {
+                print("offline")
+                self.online = false
+            }
+        }
+        let queue = DispatchQueue(label: "Monitor")
+        self.monitor.start(queue: queue)
     }
 }
 
