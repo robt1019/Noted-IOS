@@ -17,9 +17,12 @@ struct TextView: UIViewRepresentable {
         view.delegate = context.coordinator
         view.isScrollEnabled = true
         view.isEditable = true
+        view.isSelectable = true
         view.isUserInteractionEnabled = true
         view.showsVerticalScrollIndicator = false
         view.font = UIFont.systemFont(ofSize: 15.0)
+        view.spellCheckingType = UITextSpellCheckingType.no
+        view.autocorrectionType = UITextAutocorrectionType.no
         return view
     }
     

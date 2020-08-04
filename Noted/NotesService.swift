@@ -24,7 +24,6 @@ open class NotesService {
                 "content": notes,
                 "prev": prev
             ]
-            
             self.socket?.emit("updateNotes", payload)
         } else {
             let defaults = UserDefaults.standard
