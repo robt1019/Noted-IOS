@@ -12,11 +12,13 @@ import JWTDecode
 
 struct ContentView: View {
     
-    @State private var message = ""
+    @State private var latestServerNotes = ""
+    @State private var isEditing = false
     private let notes = NotesService()
     @ObservedObject private var keyboard = KeyboardResponder()
     @State private var loggedIn = false
     @State private var logoutAlertIsVisible = false
+    @State private var currentNotes: String = ""
     
     var body: some View {
         VStack {
@@ -25,10 +27,11 @@ struct ContentView: View {
                     HStack(spacing: 10) {
                         Button(action: {
                             self.closeKeyboard()
-                            self.notes.saveNotes(notes: self.message)
+                            self.notes.saveNotes(notes: self.currentNotes, prev: self.latestServerNotes)
+                            self.isEditing = false
                         }) {
                             Text("Save")
-                        }
+                        }.disabled(self.latestServerNotes == self.currentNotes)
                         Button(action: {
                             self.logoutAlertIsVisible = true
                         }) {
@@ -37,7 +40,7 @@ struct ContentView: View {
                             Alert in
                             return Alert(title: Text("Logout"), message: Text("Press continue on the next prompt to log out"), dismissButton: .default(Text("OK")){
                                 AuthService.logout(loggedOut: {
-                                    self.message = ""
+                                    self.currentNotes = ""
                                     self.loggedIn = false
                                 }, failed: {
                                     self.loggedIn = true
@@ -45,14 +48,24 @@ struct ContentView: View {
                                 })
                         }
                     }.padding()
-                    TextView(text: $message)
+                    TextView(text: Binding(
+                        get: {self.currentNotes},
+                        set: {
+                            (newValue) in
+                            self.currentNotes = newValue
+                            self.isEditing = self.latestServerNotes != self.currentNotes
+                    }
+                    ))
                         .frame(maxHeight: .infinity)
                         .onAppear {
                             print("appearing")
                             self.notes.on(event: "notesUpdated", callback: {
                                 notes in
                                 print("got some updated notes")
-                                self.message = notes
+                                if (!self.isEditing) {
+                                    self.latestServerNotes = notes
+                                    self.currentNotes = notes
+                                }
                             })
                     }
                 }

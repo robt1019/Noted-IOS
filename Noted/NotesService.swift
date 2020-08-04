@@ -14,12 +14,12 @@ open class NotesService {
     private var socketManager: SocketManager? = nil
     private var socket: SocketIOClient? = nil
     
-    
     private var onNotesUpdated: ((String) -> Void)? = nil
     
-    public func saveNotes(notes: String) {
+    public func saveNotes(notes: String, prev: String) {
         let payload = [
-            "content": notes
+            "content": notes,
+            "prev": prev
         ]
         
         self.socket?.emit("updateNotes", payload)
