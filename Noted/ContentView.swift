@@ -75,7 +75,6 @@ struct ContentView: View {
                             self.notes.on(event: "notesUpdated", callback: {
                                 notes in
                                 print("got some updated notes")
-                                print(notes)
                                 if (!self.isEditing) {
                                     self.latestSavedNotes = notes
                                     self.currentNotes = notes
@@ -112,6 +111,7 @@ struct ContentView: View {
     }
     
     func determineIfLoggedIn() {
+        print("determineIfLoggedIn")
         Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: {_ in
             print("trying to figure out logged in status")
             AuthService.getAccessToken(accessTokenFound: {
@@ -131,6 +131,7 @@ struct ContentView: View {
             print(path.status)
             if(path.status == .satisfied) {
                 print("online")
+                self.notes.restart()
                 self.online = true
             } else {
                 print("offline")

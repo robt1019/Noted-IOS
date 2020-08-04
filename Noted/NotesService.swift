@@ -19,18 +19,12 @@ open class NotesService {
     
     public func saveNotes(notes: String, prev: String, online: Bool) {
         
-        print("notes: ")
-        print(notes)
-        print("prev: ")
-        print(prev)
         if (online) {
             let payload = [
                 "content": notes,
                 "prev": prev
             ]
             
-            print("emitting: ")
-            print(payload)
             self.socket?.emit("updateNotes", payload)
         } else {
             let defaults = UserDefaults.standard
@@ -100,6 +94,10 @@ open class NotesService {
             }
             
         }
+    }
+    
+    public func restart() {
+        self.socket?.connect()
     }
     
     public func processOfflineChanges() {
