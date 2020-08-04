@@ -14,6 +14,7 @@ import Network
 struct ContentView: View {
     
     @State private var latestSavedNotes = ""
+    @State private var latestServerNotes = ""
     @State private var isEditing = false
     private let notes = NotesService()
     @ObservedObject private var keyboard = KeyboardResponder()
@@ -35,10 +36,10 @@ struct ContentView: View {
                                 self.closeKeyboard()
                                 if (self.online) {
                                     print("saving online")
-                                    self.notes.saveNotes(notes: self.currentNotes, prev: self.latestSavedNotes, online: true)
+                                    self.notes.saveNotes(notes: self.currentNotes, prev: self.latestServerNotes, online: true)
                                 } else {
                                     print("saving offline")
-                                    self.notes.saveNotes(notes: self.currentNotes, prev: self.latestSavedNotes, online: false)
+                                    self.notes.saveNotes(notes: self.currentNotes, prev: self.latestServerNotes, online: false)
                                     self.latestSavedNotes = self.currentNotes
                                 }
                                 self.isEditing = false
@@ -153,6 +154,7 @@ struct ContentView: View {
             self.initialised = true
             if (!self.isEditing) {
                 self.latestSavedNotes = notes
+                self.latestServerNotes = notes
                 self.currentNotes = notes
             }
         })
