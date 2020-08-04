@@ -13,7 +13,7 @@ import Network
 
 struct ContentView: View {
     
-    @State private var latestServerNotes = ""
+    @State private var latestSavedNotes = ""
     @State private var isEditing = false
     private let notes = NotesService()
     @ObservedObject private var keyboard = KeyboardResponder()
@@ -22,6 +22,7 @@ struct ContentView: View {
     @State private var currentNotes: String = ""
     @State private var online = false
     private let monitor = NWPathMonitor()
+    private let queue = DispatchQueue(label: "Monitor")
     
     var body: some View {
         VStack {
@@ -30,11 +31,18 @@ struct ContentView: View {
                     HStack(spacing: 10) {
                         Button(action: {
                             self.closeKeyboard()
-                            self.notes.saveNotes(notes: self.currentNotes, prev: self.latestServerNotes)
+                            if (self.online) {
+                                print("saving online")
+                                self.notes.saveNotes(notes: self.currentNotes, prev: self.latestSavedNotes, online: true)
+                            } else {
+                                print("saving offline")
+                                self.notes.saveNotes(notes: self.currentNotes, prev: self.latestSavedNotes, online: false)
+                                self.latestSavedNotes = self.currentNotes
+                            }
                             self.isEditing = false
                         }) {
                             Text("Save")
-                        }.disabled(self.latestServerNotes == self.currentNotes)
+                        }.disabled(self.latestSavedNotes == self.currentNotes)
                         Button(action: {
                             self.logoutAlertIsVisible = true
                         }) {
@@ -45,6 +53,8 @@ struct ContentView: View {
                                 AuthService.logout(loggedOut: {
                                     self.currentNotes = ""
                                     self.loggedIn = false
+                                    let defaults = UserDefaults.standard
+                                    defaults.set([], forKey: "OfflineChanges")
                                 }, failed: {
                                     self.loggedIn = true
                                 })
@@ -56,7 +66,7 @@ struct ContentView: View {
                         set: {
                             (newValue) in
                             self.currentNotes = newValue
-                            self.isEditing = self.latestServerNotes != self.currentNotes
+                            self.isEditing = self.latestSavedNotes != self.currentNotes
                     }
                     ))
                         .frame(maxHeight: .infinity)
@@ -65,12 +75,13 @@ struct ContentView: View {
                             self.notes.on(event: "notesUpdated", callback: {
                                 notes in
                                 print("got some updated notes")
+                                print(notes)
                                 if (!self.isEditing) {
-                                    self.latestServerNotes = notes
+                                    self.latestSavedNotes = notes
                                     self.currentNotes = notes
                                 }
                             })
-
+                            
                     }
                 }
                 .padding()
@@ -117,6 +128,7 @@ struct ContentView: View {
     
     func monitorOnlineStatus() {
         self.monitor.pathUpdateHandler = { path in
+            print(path.status)
             if(path.status == .satisfied) {
                 print("online")
                 self.online = true
@@ -125,8 +137,7 @@ struct ContentView: View {
                 self.online = false
             }
         }
-        let queue = DispatchQueue(label: "Monitor")
-        self.monitor.start(queue: queue)
+        self.monitor.start(queue: self.queue)
     }
 }
 
