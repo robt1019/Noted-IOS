@@ -1,2 +1,4 @@
 Noted.xcodeproj/project.xcworkspace/xcuserdata
 Pods
+js/dist
+js/node_modules

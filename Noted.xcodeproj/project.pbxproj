@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		74F2D6D20184DC0E17748CA6 /* Pods_Noted.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ADDA17AB756C450ACB88305B /* Pods_Noted.framework */; };
+		EC03D9B124DAD9A500D92BAB /* NotesDiffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC03D9B024DAD9A500D92BAB /* NotesDiffer.swift */; };
+		EC03D9B324DAE0F600D92BAB /* Noted.bundle.js in Resources */ = {isa = PBXBuildFile; fileRef = EC03D9B224DAE0F600D92BAB /* Noted.bundle.js */; };
 		EC6C9BEF24D082AF00F45386 /* NotesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6C9BEE24D082AF00F45386 /* NotesService.swift */; };
 		EC6C9BF124D08CD000F45386 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6C9BF024D08CD000F45386 /* AuthService.swift */; };
 		EC8424F124C5A70000E061C0 /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC8424F024C5A70000E061C0 /* Auth0.plist */; };
@@ -24,6 +26,8 @@
 /* Begin PBXFileReference section */
 		ADDA17AB756C450ACB88305B /* Pods_Noted.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Noted.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BC9A457BFEB0CE7294C89359 /* Pods-Noted.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Noted.debug.xcconfig"; path = "Target Support Files/Pods-Noted/Pods-Noted.debug.xcconfig"; sourceTree = "<group>"; };
+		EC03D9B024DAD9A500D92BAB /* NotesDiffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesDiffer.swift; sourceTree = "<group>"; };
+		EC03D9B224DAE0F600D92BAB /* Noted.bundle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = Noted.bundle.js; path = js/dist/Noted.bundle.js; sourceTree = "<group>"; };
 		EC6C9BEE24D082AF00F45386 /* NotesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesService.swift; sourceTree = "<group>"; };
 		EC6C9BF024D08CD000F45386 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		EC8424F024C5A70000E061C0 /* Auth0.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Auth0.plist; sourceTree = "<group>"; };
@@ -72,6 +76,7 @@
 		ECC79A8B24C0603E00B54B6E = {
 			isa = PBXGroup;
 			children = (
+				EC03D9B224DAE0F600D92BAB /* Noted.bundle.js */,
 				ECC79A9624C0603E00B54B6E /* Noted */,
 				ECC79A9524C0603E00B54B6E /* Products */,
 				97708ECD8C84562FD4ACFA7C /* Pods */,
@@ -102,6 +107,7 @@
 				EC6C9BEE24D082AF00F45386 /* NotesService.swift */,
 				EC6C9BF024D08CD000F45386 /* AuthService.swift */,
 				ECC32C6924D1D6A3004800B5 /* KeyboardResponder.swift */,
+				EC03D9B024DAD9A500D92BAB /* NotesDiffer.swift */,
 			);
 			path = Noted;
 			sourceTree = "<group>";
@@ -181,6 +187,7 @@
 				ECC79AA424C0604000B54B6E /* LaunchScreen.storyboard in Resources */,
 				ECC79AA124C0604000B54B6E /* Preview Assets.xcassets in Resources */,
 				EC8424F124C5A70000E061C0 /* Auth0.plist in Resources */,
+				EC03D9B324DAE0F600D92BAB /* Noted.bundle.js in Resources */,
 				ECC79A9E24C0604000B54B6E /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -239,6 +246,7 @@
 				ECC32C6A24D1D6A3004800B5 /* KeyboardResponder.swift in Sources */,
 				ECC79A9A24C0603E00B54B6E /* SceneDelegate.swift in Sources */,
 				EC6C9BF124D08CD000F45386 /* AuthService.swift in Sources */,
+				EC03D9B124DAD9A500D92BAB /* NotesDiffer.swift in Sources */,
 				EC6C9BEF24D082AF00F45386 /* NotesService.swift in Sources */,
 				ECC79A9C24C0603E00B54B6E /* ContentView.swift in Sources */,
 			);

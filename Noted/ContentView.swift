@@ -7,8 +7,6 @@
 //
 
 import SwiftUI
-import Auth0
-import JWTDecode
 import Network
 
 struct ContentView: View {
@@ -105,6 +103,10 @@ struct ContentView: View {
             }
         }
         .onAppear() {
+            let diff = NotesDiffer.shared.diff(notes1: "notes1", notes2: "notes2")
+            print(diff)
+            print(NotesDiffer.shared.patch(notes1: "notes1", diff: diff))
+            
             self.monitorOnlineStatus()
             self.determineIfLoggedIn()
             self.listenForNotes()
