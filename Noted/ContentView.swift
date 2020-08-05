@@ -102,11 +102,7 @@ struct ContentView: View {
                 }
             }
         }
-        .onAppear() {
-            let diff = NotesDiffer.shared.diff(notes1: "notes1", notes2: "notes2")
-            print(diff)
-            print(NotesDiffer.shared.patch(notes1: "notes1", diff: diff))
-            
+        .onAppear() {            
             self.monitorOnlineStatus()
             self.determineIfLoggedIn()
             self.listenForNotes()
@@ -124,7 +120,7 @@ struct ContentView: View {
             AuthService.getAccessToken(accessTokenFound: {
                 token in
                 print("logged in!")
-                self.notes.connectToSocket(token: token)
+                self.notes.connectToSocket(token: token, initialNotes: self.currentNotes)
                 self.loggedIn = true
             }, noAccessToken: {
                 print("logged out!")
@@ -139,7 +135,7 @@ struct ContentView: View {
             print(path.status)
             if(path.status == .satisfied) {
                 print("online")
-                self.notes.restart()
+                self.notes.restart(localNotes: self.currentNotes)
                 self.online = true
             } else {
                 print("offline")
@@ -151,13 +147,14 @@ struct ContentView: View {
     
     func listenForNotes() {
         self.notes.on(event: "notesUpdated", callback: {
-            notes in
+            diff in
             print("got some updated notes")
             self.initialised = true
             if (!self.isEditing) {
-                self.latestSavedNotes = notes
-                self.latestServerNotes = notes
-                self.currentNotes = notes
+                let newNotes = NotesDiffer.shared.patch(notes1: self.latestSavedNotes, diff: diff)
+                self.latestSavedNotes = newNotes
+                self.latestServerNotes = newNotes
+                self.currentNotes = newNotes
             }
         })
     }

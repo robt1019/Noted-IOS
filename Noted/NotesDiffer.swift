@@ -21,11 +21,11 @@ class NotesDiffer: NSObject {
         self.context.evaluateScript(jsCode)
     }
     
-    func diff(notes1: String, notes2: String) -> Any {
+    func diff(notes1: String, notes2: String) -> [Any] {
         let jsModule = self.context.objectForKeyedSubscript("Noted")
         let diffMatchPatch = jsModule?.objectForKeyedSubscript("diffMatchPatch")
         let result = diffMatchPatch!.objectForKeyedSubscript("diff_main").call(withArguments: [notes1, notes2])
-        return result
+        return (result!.toArray())
     }
     
     func patch(notes1: String, diff: Any) -> String {
