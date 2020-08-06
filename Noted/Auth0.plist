@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+   Property List.plist
+   Noted
+
+   Created by Robert Taylor on 20/07/2020.
+   Copyright (c) 2020 Myware. All rights reserved.
+-->
+<plist version="1.0">
+<dict>
+  <key>ClientId</key>
+  <string>v8NV0NqJxIKhEGFS5IL6UCadNq6D55Wt</string>
+  <key>Domain</key>
+  <string>dev-xvk6pxhy.eu.auth0.com</string>
+</dict>
+</plist>
