@@ -27,7 +27,6 @@ struct ContentView: View {
             )
         }.navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
-    
 }
 
 struct NotesView: View {
@@ -78,21 +77,25 @@ struct NoteView: View {
                 .padding()
             
             TextView(text: $notesBody)
-            .frame(maxHeight: .infinity)
-            .padding(.leading, 11)
-            }
-            .padding()
-            .padding(.bottom, keyboard.currentHeight + 16)
-            .edgesIgnoringSafeArea(.bottom)
-            .animation(.easeOut(duration: 0.16))
-            .onAppear {
-                self.notesTitle = self.note.title!
-                self.notesBody = self.note.body!
-            }
-            .onDisappear {
+                .frame(maxHeight: .infinity)
+                .padding(.leading, 11)
+        }
+        .padding()
+        .padding(.bottom, keyboard.currentHeight + 16)
+        .edgesIgnoringSafeArea(.bottom)
+        .animation(.easeOut(duration: 0.16))
+        .onAppear {
+            self.notesTitle = self.note.title!
+            self.notesBody = self.note.body!
+        }
+        .onDisappear {
+            Note.updateBody(note: self.note, body: self.notesBody, in: self.viewContext)
+            Note.updateTitle(note: self.note, title: self.notesTitle, in: self.viewContext)
+        }.navigationBarTitle("").navigationBarHidden(true)
+            .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
                 Note.updateBody(note: self.note, body: self.notesBody, in: self.viewContext)
                 Note.updateTitle(note: self.note, title: self.notesTitle, in: self.viewContext)
-            }.navigationBarTitle("").navigationBarHidden(true)
+        }
     }
 }
 
