@@ -19,7 +19,10 @@ struct ContentView: View {
         Group {
             if (self.loggedIn) {
                 NavigationView {
-                    NotesView()
+                    NotesView(onNoteUpdated: { note in
+                        Note.updateBody(note: note, body: note.body!, in: self.viewContext)
+                        Note.updateTitle(note: note, title: note.title!, in: self.viewContext)
+                    })
                         .navigationBarTitle(Text("Notes"))
                         .navigationBarItems(
                             leading: LogoutButton(
@@ -82,8 +85,6 @@ struct LogoutButton: View {
             return Alert(title: Text("Logout"), message: Text("Press continue on the next prompt to log out"), dismissButton: .default(Text("OK")){
                 AuthService.logout(loggedOut: {
                     self.onLoggedOut()
-                    let defaults = UserDefaults.standard
-                    defaults.set([], forKey: "OfflineChanges")
                 }, failed: {
                     self.onLogoutFailure()
                 })
@@ -117,10 +118,14 @@ struct NotesView: View {
     @Environment(\.managedObjectContext)
     var viewContext
     
+    let onNoteUpdated: (Note) -> Void
+    
     var body: some View {
         List {
             ForEach(self.notes, id: \.self) { (note: Note) in
-                NavigationLink(destination: NoteView(note: note)) {
+                NavigationLink(destination: NoteView(note: note, onNoteUpdated: { updatedNote in
+                    self.onNoteUpdated(updatedNote)
+                })) {
                     Text(note.title!)
                 }
             }.onDelete { indices in
