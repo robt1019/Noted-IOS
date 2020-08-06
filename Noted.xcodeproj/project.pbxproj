@@ -18,7 +18,6 @@
 		EC98ABD524DBFF3D00265A10 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC98ABD324DBFF3D00265A10 /* LaunchScreen.storyboard */; };
 		EC98ABE024DBFF3D00265A10 /* NotedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC98ABDF24DBFF3D00265A10 /* NotedTests.swift */; };
 		EC98ABEB24DBFF3D00265A10 /* NotedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC98ABEA24DBFF3D00265A10 /* NotedUITests.swift */; };
-		ECA1B53424DC110900FCD8E4 /* Notes.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA1B53324DC110900FCD8E4 /* Notes.swift */; };
 		ECA1B53624DC111400FCD8E4 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA1B53524DC111400FCD8E4 /* Note.swift */; };
 /* End PBXBuildFile section */
 
@@ -59,7 +58,6 @@
 		EC98ABE624DBFF3D00265A10 /* NotedUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NotedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC98ABEA24DBFF3D00265A10 /* NotedUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotedUITests.swift; sourceTree = "<group>"; };
 		EC98ABEC24DBFF3D00265A10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		ECA1B53324DC110900FCD8E4 /* Notes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notes.swift; sourceTree = "<group>"; };
 		ECA1B53524DC111400FCD8E4 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -134,7 +132,6 @@
 				EC98ABC324DBFF3C00265A10 /* AppDelegate.swift */,
 				EC98ABC824DBFF3C00265A10 /* SceneDelegate.swift */,
 				EC98ABCA24DBFF3C00265A10 /* Event.swift */,
-				ECA1B53324DC110900FCD8E4 /* Notes.swift */,
 				ECA1B53524DC111400FCD8E4 /* Note.swift */,
 				EC98ABCC24DBFF3C00265A10 /* ContentView.swift */,
 				EC98ABCE24DBFF3D00265A10 /* Assets.xcassets */,
@@ -353,7 +350,6 @@
 				EC98ABC724DBFF3C00265A10 /* Noted.xcdatamodeld in Sources */,
 				EC98ABC424DBFF3C00265A10 /* AppDelegate.swift in Sources */,
 				EC98ABC924DBFF3C00265A10 /* SceneDelegate.swift in Sources */,
-				ECA1B53424DC110900FCD8E4 /* Notes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

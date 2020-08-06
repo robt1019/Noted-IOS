@@ -20,28 +20,58 @@ struct ContentView: View {
     var viewContext   
  
     var body: some View {
+        
         NavigationView {
-            MasterView()
-                .navigationBarTitle(Text("Master"))
-                .navigationBarItems(
-                    leading: EditButton(),
-                    trailing: Button(
-                        action: {
-                            withAnimation { Event.create(in: self.viewContext) }
-                        }
-                    ) { 
-                        Image(systemName: "plus")
-                    }
-                )
-            Text("Detail view content goes here")
-                .navigationBarTitle(Text("Detail"))
-        }.navigationViewStyle(DoubleColumnNavigationViewStyle())
+            NotesView()
+        }
+        
+//        NavigationView {
+//            MasterView()
+//                .navigationBarTitle(Text("Master"))
+//                .navigationBarItems(
+//                    leading: EditButton(),
+//                    trailing: Button(
+//                        action: {
+//                            withAnimation { Event.create(in: self.viewContext) }
+//                        }
+//                    ) {
+//                        Image(systemName: "plus")
+//                    }
+//                )
+//            Text("Detail view content goes here")
+//                .navigationBarTitle(Text("Detail"))
+//        }.navigationViewStyle(DoubleColumnNavigationViewStyle())
+    }
+}
+
+struct NotesView: View {
+    
+    @FetchRequest(sortDescriptors: [])
+    var notes: FetchedResults<Note>
+    
+    @Environment(\.managedObjectContext)
+    var viewContext
+    
+    var body: some View {
+        List {
+            ForEach(self.notes, id: \.self) { (note: Note) in
+                NavigationLink(destination: Text(note.title!)) {
+                    Text(note.title!)
+                }
+            }
+            Button(action: {
+                print(self.notes)
+                Note.create(in: self.viewContext)
+            }) {
+                Text("click me")
+            }
+        }
     }
 }
 
 struct MasterView: View {
     @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Event.timestamp, ascending: true)], 
+        sortDescriptors: [NSSortDescriptor(keyPath: \Event.timestamp, ascending: true)],
         animation: .default)
     var events: FetchedResults<Event>
 

@@ -10,12 +10,11 @@ import SwiftUI
 import CoreData
 
 extension Note {
-    static func create(in managedObjectContext: NSManagedObjectContext, notes: Notes){
+    static func create(in managedObjectContext: NSManagedObjectContext){
         let newNote = self.init(context: managedObjectContext)
         newNote.id = UUID()
-        newNote.title = ""
-        newNote.body = ""
-        newNote.notes = notes
+        newNote.title = "New Note"
+        newNote.body = "Note details"
         
         do {
             try  managedObjectContext.save()

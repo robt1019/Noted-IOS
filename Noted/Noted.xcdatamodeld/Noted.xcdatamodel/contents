@@ -4,19 +4,14 @@
         <attribute name="timestamp" optional="YES" attributeType="Date"/>
         <userInfo/>
     </entity>
-    <entity name="Note" representedClassName="Note" syncable="YES" codeGenerationType="class">
-        <attribute name="body" optional="YES" attributeType="String"/>
-        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="title" optional="YES" attributeType="String"/>
-        <relationship name="notes" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Notes"/>
-    </entity>
-    <entity name="Notes" representedClassName="Notes" syncable="YES" codeGenerationType="class">
-        <attribute name="order" optional="YES" attributeType="Transformable"/>
-        <relationship name="note" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Note"/>
+    <entity name="Note" representedClassName="Note" codeGenerationType="class">
+        <attribute name="body" attributeType="String" defaultValueString=""/>
+        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="title" attributeType="String" defaultValueString=""/>
+        <userInfo/>
     </entity>
     <elements>
         <element name="Event" positionX="261" positionY="189" width="128" height="58"/>
-        <element name="Notes" positionX="-72.734375" positionY="162.14453125" width="128" height="58"/>
-        <element name="Note" positionX="-271.54296875" positionY="192.4609375" width="123.203125" height="103"/>
+        <element name="Note" positionX="-271.54296875" positionY="192.4609375" width="123.203125" height="88"/>
     </elements>
 </model>
