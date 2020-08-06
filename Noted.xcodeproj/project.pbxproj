@@ -12,6 +12,7 @@
 		EC7BF67424DC3514004D8793 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7BF67324DC3514004D8793 /* KeyboardResponder.swift */; };
 		EC7BF67724DC4E11004D8793 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7BF67524DC4E11004D8793 /* AuthService.swift */; };
 		EC7BF67824DC4E11004D8793 /* Auth0.plist in Resources */ = {isa = PBXBuildFile; fileRef = EC7BF67624DC4E11004D8793 /* Auth0.plist */; };
+		EC7BF67B24DC5A27004D8793 /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7BF67A24DC5A27004D8793 /* NoteView.swift */; };
 		EC98ABC424DBFF3C00265A10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC98ABC324DBFF3C00265A10 /* AppDelegate.swift */; };
 		EC98ABC724DBFF3C00265A10 /* Noted.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EC98ABC524DBFF3C00265A10 /* Noted.xcdatamodeld */; };
 		EC98ABC924DBFF3C00265A10 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC98ABC824DBFF3C00265A10 /* SceneDelegate.swift */; };
@@ -50,6 +51,7 @@
 		EC7BF67324DC3514004D8793 /* KeyboardResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		EC7BF67524DC4E11004D8793 /* AuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		EC7BF67624DC4E11004D8793 /* Auth0.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Auth0.plist; sourceTree = "<group>"; };
+		EC7BF67A24DC5A27004D8793 /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
 		EC98ABC024DBFF3C00265A10 /* Noted.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Noted.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC98ABC324DBFF3C00265A10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EC98ABC624DBFF3C00265A10 /* Noted.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Noted.xcdatamodel; sourceTree = "<group>"; };
@@ -112,6 +114,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		EC7BF67924DC59F9004D8793 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				EC7BF67A24DC5A27004D8793 /* NoteView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		EC98ABB724DBFF3C00265A10 = {
 			isa = PBXGroup;
 			children = (
@@ -137,6 +147,7 @@
 		EC98ABC224DBFF3C00265A10 /* Noted */ = {
 			isa = PBXGroup;
 			children = (
+				EC7BF67924DC59F9004D8793 /* Views */,
 				EC7BF67624DC4E11004D8793 /* Auth0.plist */,
 				EC7BF67524DC4E11004D8793 /* AuthService.swift */,
 				EC7BF67324DC3514004D8793 /* KeyboardResponder.swift */,
@@ -362,6 +373,7 @@
 				ECA1B53624DC111400FCD8E4 /* Note.swift in Sources */,
 				EC7BF67724DC4E11004D8793 /* AuthService.swift in Sources */,
 				EC7BF67224DC29DD004D8793 /* TextView.swift in Sources */,
+				EC7BF67B24DC5A27004D8793 /* NoteView.swift in Sources */,
 				EC98ABC724DBFF3C00265A10 /* Noted.xcdatamodeld in Sources */,
 				EC7BF67424DC3514004D8793 /* KeyboardResponder.swift in Sources */,
 				EC98ABC424DBFF3C00265A10 /* AppDelegate.swift in Sources */,
