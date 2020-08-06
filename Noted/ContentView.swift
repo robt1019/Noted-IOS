@@ -69,10 +69,25 @@ struct DetailView: View {
 
 struct NoteView: View {
     @ObservedObject var note: Note
+    @State var notesBody: String = ""
+    
+    @Environment(\.managedObjectContext)
+    var viewContext
+    
     var body: some View {
         VStack {
             Text(note.title!).fontWeight(.bold)
-            Text(note.body!)
+            TextView(text: Binding(
+                get: { self.notesBody },
+                set: { newValue in
+                    self.notesBody = newValue
+                    Note.updateBody(note: self.note, body: self.notesBody, in: self.viewContext)
+            }
+            ))
+                .frame(maxHeight: .infinity)
+                .onAppear {
+                    self.notesBody = self.note.body!
+            }
         }
     }
 }
