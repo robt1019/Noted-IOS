@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		A8A44529F4C21A13740D667F /* Pods_Noted.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E2B77B27F52116B5F6EB573 /* Pods_Noted.framework */; };
 		EC7BF67224DC29DD004D8793 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7BF67124DC29DD004D8793 /* TextView.swift */; };
+		EC7BF67424DC3514004D8793 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7BF67324DC3514004D8793 /* KeyboardResponder.swift */; };
 		EC98ABC424DBFF3C00265A10 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC98ABC324DBFF3C00265A10 /* AppDelegate.swift */; };
 		EC98ABC724DBFF3C00265A10 /* Noted.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = EC98ABC524DBFF3C00265A10 /* Noted.xcdatamodeld */; };
 		EC98ABC924DBFF3C00265A10 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC98ABC824DBFF3C00265A10 /* SceneDelegate.swift */; };
@@ -44,6 +45,7 @@
 		7E2B77B27F52116B5F6EB573 /* Pods_Noted.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Noted.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		82FC04ACE1F05A59314A30DC /* Pods-Noted.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Noted.release.xcconfig"; path = "Target Support Files/Pods-Noted/Pods-Noted.release.xcconfig"; sourceTree = "<group>"; };
 		EC7BF67124DC29DD004D8793 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
+		EC7BF67324DC3514004D8793 /* KeyboardResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		EC98ABC024DBFF3C00265A10 /* Noted.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Noted.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC98ABC324DBFF3C00265A10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EC98ABC624DBFF3C00265A10 /* Noted.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Noted.xcdatamodel; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 		EC98ABC224DBFF3C00265A10 /* Noted */ = {
 			isa = PBXGroup;
 			children = (
+				EC7BF67324DC3514004D8793 /* KeyboardResponder.swift */,
 				EC7BF67124DC29DD004D8793 /* TextView.swift */,
 				EC98ABC324DBFF3C00265A10 /* AppDelegate.swift */,
 				EC98ABC824DBFF3C00265A10 /* SceneDelegate.swift */,
@@ -352,6 +355,7 @@
 				ECA1B53624DC111400FCD8E4 /* Note.swift in Sources */,
 				EC7BF67224DC29DD004D8793 /* TextView.swift in Sources */,
 				EC98ABC724DBFF3C00265A10 /* Noted.xcdatamodeld in Sources */,
+				EC7BF67424DC3514004D8793 /* KeyboardResponder.swift in Sources */,
 				EC98ABC424DBFF3C00265A10 /* AppDelegate.swift in Sources */,
 				EC98ABC924DBFF3C00265A10 /* SceneDelegate.swift in Sources */,
 			);
@@ -524,6 +528,7 @@
 				DEVELOPMENT_TEAM = A5C9J78U4Q;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Noted/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -545,6 +550,7 @@
 				DEVELOPMENT_TEAM = A5C9J78U4Q;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Noted/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

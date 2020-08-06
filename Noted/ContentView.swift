@@ -8,13 +8,6 @@
 
 import SwiftUI
 
-private let dateFormatter: DateFormatter = {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateStyle = .medium
-    dateFormatter.timeStyle = .medium
-    return dateFormatter
-}()
-
 struct ContentView: View {
     @Environment(\.managedObjectContext)
     var viewContext   
@@ -30,7 +23,7 @@ struct ContentView: View {
                     }
                     ) {
                         Image(systemName: "plus")
-                    }
+                    }.padding()
             )
         }.navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
@@ -58,37 +51,39 @@ struct NotesView: View {
     }
 }
 
-struct DetailView: View {
-    @ObservedObject var event: Event
-    
-    var body: some View {
-        Text("\(event.timestamp!, formatter: dateFormatter)")
-            .navigationBarTitle(Text("Detail"))
-    }
-}
-
 struct NoteView: View {
     @ObservedObject var note: Note
+    
+    @State var notesTitle: String = ""
     @State var notesBody: String = ""
     
     @Environment(\.managedObjectContext)
     var viewContext
     
+    @ObservedObject private var keyboard = KeyboardResponder()
+    
     var body: some View {
         VStack {
-            Text(note.title!).fontWeight(.bold)
-            TextView(text: Binding(
-                get: { self.notesBody },
-                set: { newValue in
-                    self.notesBody = newValue
-                    Note.updateBody(note: self.note, body: self.notesBody, in: self.viewContext)
+            TextField("", text: $notesTitle)
+                .font(Font.system(size: 24, weight: .heavy))
+                .padding()
+            
+            TextView(text: $notesBody)
+            .frame(maxHeight: .infinity)
+            .padding(.leading, 11)
             }
-            ))
-                .frame(maxHeight: .infinity)
-                .onAppear {
-                    self.notesBody = self.note.body!
+            .padding()
+            .padding(.bottom, keyboard.currentHeight)
+            .edgesIgnoringSafeArea(.bottom)
+            .animation(.easeOut(duration: 0.16))
+            .onAppear {
+                self.notesTitle = self.note.title!
+                self.notesBody = self.note.body!
             }
-        }
+            .onDisappear {
+                Note.updateBody(note: self.note, body: self.notesBody, in: self.viewContext)
+                Note.updateTitle(note: self.note, title: self.notesTitle, in: self.viewContext)
+            }
     }
 }
 
