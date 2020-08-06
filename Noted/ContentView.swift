@@ -10,22 +10,102 @@ import SwiftUI
 
 struct ContentView: View {
     @Environment(\.managedObjectContext)
-    var viewContext   
+    var viewContext
+    
+    @State var loggedIn = false
+    @State var initialised = false
     
     var body: some View {
-        NavigationView {
-            NotesView()
-                .navigationBarTitle(Text("Notes"))
-                .navigationBarItems(
-                    trailing: Button(
-                        action: {
-                            withAnimation { Note.create(in: self.viewContext) }
-                    }
-                    ) {
-                        Image(systemName: "plus")
-                    }.padding()
-            )
-        }.navigationViewStyle(DoubleColumnNavigationViewStyle())
+        Group {
+            if (self.loggedIn) {
+                NavigationView {
+                    NotesView()
+                        .navigationBarTitle(Text("Notes"))
+                        .navigationBarItems(
+                            leading: LogoutButton(
+                                onLoggedOut: {
+                                    self.loggedIn = false
+                                    print("logged out")
+                            },
+                                onLogoutFailure: {
+                                    self.loggedIn = true
+                                    print("logged in")
+                            }),
+                            trailing: Button(
+                                action: {
+                                    withAnimation { Note.create(in: self.viewContext) }
+                            }
+                            ) {
+                                Image(systemName: "plus")
+                            }.padding()
+                    )
+                }.navigationViewStyle(DoubleColumnNavigationViewStyle())
+            } else {
+                LoggedOutView(onLoggedIn: {
+                    self.loggedIn = true
+                })
+            }
+        }.onAppear {
+            self.determineIfLoggedIn()
+        }
+    }
+    
+    func determineIfLoggedIn() {
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: {_ in
+            AuthService.getAccessToken(accessTokenFound: {
+                token in
+                self.loggedIn = true
+            }, noAccessToken: {
+                self.loggedIn = false
+                self.initialised = true
+            })
+        })
+    }
+}
+
+struct LogoutButton: View {
+    
+    @State var logoutAlertIsVisible = false
+    let onLoggedOut: () -> Void
+    let onLogoutFailure: () -> Void
+    
+    @Environment(\.managedObjectContext)
+    var viewContext
+    
+    var body: some View {
+        Button(action: {
+            self.logoutAlertIsVisible = true
+        }) {
+            Text("Logout")
+        }.alert(isPresented: $logoutAlertIsVisible) {() ->
+            Alert in
+            return Alert(title: Text("Logout"), message: Text("Press continue on the next prompt to log out"), dismissButton: .default(Text("OK")){
+                AuthService.logout(loggedOut: {
+                    self.onLoggedOut()
+                    let defaults = UserDefaults.standard
+                    defaults.set([], forKey: "OfflineChanges")
+                }, failed: {
+                    self.onLogoutFailure()
+                })
+                })
+        }
+    }
+}
+
+struct LoggedOutView: View {
+    
+    let onLoggedIn: () -> Void
+    
+    var body: some View {
+        Button(action: {
+            AuthService.getAccessToken(accessTokenFound: {token in
+                self.onLoggedIn()
+            }, noAccessToken: {
+                print("could not log in")
+            })
+        }) {
+            Text("Login")
+        }
     }
 }
 
