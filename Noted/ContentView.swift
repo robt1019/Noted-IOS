@@ -69,7 +69,8 @@ struct NoteView: View {
             Button(action: {
                 self.presentationMode.wrappedValue.dismiss()
             }) {
-                Text("back")
+                Image(systemName: "chevron.left")
+                Text(" Notes")
             }
             
             TextField("", text: $notesTitle)
