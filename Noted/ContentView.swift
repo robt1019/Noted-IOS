@@ -60,10 +60,18 @@ struct NoteView: View {
     @Environment(\.managedObjectContext)
     var viewContext
     
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    
     @ObservedObject private var keyboard = KeyboardResponder()
     
     var body: some View {
-        VStack {
+        VStack (alignment: .leading) {
+            Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+            }) {
+                Text("back")
+            }
+            
             TextField("", text: $notesTitle)
                 .font(Font.system(size: 24, weight: .heavy))
                 .padding()
@@ -73,7 +81,7 @@ struct NoteView: View {
             .padding(.leading, 11)
             }
             .padding()
-            .padding(.bottom, keyboard.currentHeight)
+            .padding(.bottom, keyboard.currentHeight + 16)
             .edgesIgnoringSafeArea(.bottom)
             .animation(.easeOut(duration: 0.16))
             .onAppear {
@@ -83,7 +91,7 @@ struct NoteView: View {
             .onDisappear {
                 Note.updateBody(note: self.note, body: self.notesBody, in: self.viewContext)
                 Note.updateTitle(note: self.note, title: self.notesTitle, in: self.viewContext)
-            }
+            }.navigationBarTitle("").navigationBarHidden(true)
     }
 }
 
