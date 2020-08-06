@@ -18,30 +18,23 @@ private let dateFormatter: DateFormatter = {
 struct ContentView: View {
     @Environment(\.managedObjectContext)
     var viewContext   
- 
+    
     var body: some View {
-        
         NavigationView {
             NotesView()
-        }
-        
-//        NavigationView {
-//            MasterView()
-//                .navigationBarTitle(Text("Master"))
-//                .navigationBarItems(
-//                    leading: EditButton(),
-//                    trailing: Button(
-//                        action: {
-//                            withAnimation { Event.create(in: self.viewContext) }
-//                        }
-//                    ) {
-//                        Image(systemName: "plus")
-//                    }
-//                )
-//            Text("Detail view content goes here")
-//                .navigationBarTitle(Text("Detail"))
-//        }.navigationViewStyle(DoubleColumnNavigationViewStyle())
+                .navigationBarTitle(Text("Notes"))
+                .navigationBarItems(
+                    trailing: Button(
+                        action: {
+                            withAnimation { Note.create(in: self.viewContext) }
+                    }
+                    ) {
+                        Image(systemName: "plus")
+                    }
+            )
+        }.navigationViewStyle(DoubleColumnNavigationViewStyle())
     }
+    
 }
 
 struct NotesView: View {
@@ -55,39 +48,11 @@ struct NotesView: View {
     var body: some View {
         List {
             ForEach(self.notes, id: \.self) { (note: Note) in
-                NavigationLink(destination: Text(note.title!)) {
+                NavigationLink(destination: NoteView(note: note)) {
                     Text(note.title!)
                 }
-            }
-            Button(action: {
-                print(self.notes)
-                Note.create(in: self.viewContext)
-            }) {
-                Text("click me")
-            }
-        }
-    }
-}
-
-struct MasterView: View {
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Event.timestamp, ascending: true)],
-        animation: .default)
-    var events: FetchedResults<Event>
-
-    @Environment(\.managedObjectContext)
-    var viewContext
-
-    var body: some View {
-        List {
-            ForEach(events, id: \.self) { event in
-                NavigationLink(
-                    destination: DetailView(event: event)
-                ) {
-                    Text("\(event.timestamp!, formatter: dateFormatter)")
-                }
             }.onDelete { indices in
-                self.events.delete(at: indices, from: self.viewContext)
+                self.notes.delete(at: indices, from: self.viewContext)
             }
         }
     }
@@ -95,10 +60,20 @@ struct MasterView: View {
 
 struct DetailView: View {
     @ObservedObject var event: Event
-
+    
     var body: some View {
         Text("\(event.timestamp!, formatter: dateFormatter)")
             .navigationBarTitle(Text("Detail"))
+    }
+}
+
+struct NoteView: View {
+    @ObservedObject var note: Note
+    var body: some View {
+        VStack {
+            Text(note.title!).fontWeight(.bold)
+            Text(note.body!)
+        }
     }
 }
 
