@@ -11,6 +11,8 @@ import SocketIO
 
 open class NotesService {
     
+    public static let shared = NotesService()
+    
     private var socketManager: SocketManager? = nil
     private var socket: SocketIOClient? = nil
     private var connected = false

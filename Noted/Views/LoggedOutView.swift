@@ -10,12 +10,12 @@ import SwiftUI
 
 struct LoggedOutView: View {
     
-    let onLoggedIn: () -> Void
+    let onLoggedIn: (String) -> Void
     
     var body: some View {
         Button(action: {
             AuthService.getAccessToken(accessTokenFound: {token in
-                self.onLoggedIn()
+                self.onLoggedIn(token)
             }, noAccessToken: {
                 print("could not log in")
             })

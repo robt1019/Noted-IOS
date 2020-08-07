@@ -11,6 +11,10 @@
 		EC09F5C824DD49B600CE3AE0 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC09F5C724DD49B600CE3AE0 /* NotesView.swift */; };
 		EC09F5CA24DD4A7B00CE3AE0 /* LogoutButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC09F5C924DD4A7B00CE3AE0 /* LogoutButton.swift */; };
 		EC09F5CC24DD4AAB00CE3AE0 /* LoggedOutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC09F5CB24DD4AAB00CE3AE0 /* LoggedOutView.swift */; };
+		EC09F5CF24DD4B9F00CE3AE0 /* NotesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC09F5CE24DD4B9F00CE3AE0 /* NotesService.swift */; };
+		EC09F5D124DD4BCF00CE3AE0 /* NotesDiffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC09F5D024DD4BCF00CE3AE0 /* NotesDiffer.swift */; };
+		EC09F5D324DD4C2000CE3AE0 /* Noted.bundle.js in Resources */ = {isa = PBXBuildFile; fileRef = EC09F5D224DD4C2000CE3AE0 /* Noted.bundle.js */; };
+		EC09F5D524DD4FDE00CE3AE0 /* NotesToJsonService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC09F5D424DD4FDE00CE3AE0 /* NotesToJsonService.swift */; };
 		EC7BF67224DC29DD004D8793 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7BF67124DC29DD004D8793 /* TextView.swift */; };
 		EC7BF67424DC3514004D8793 /* KeyboardResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7BF67324DC3514004D8793 /* KeyboardResponder.swift */; };
 		EC7BF67724DC4E11004D8793 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7BF67524DC4E11004D8793 /* AuthService.swift */; };
@@ -52,6 +56,10 @@
 		EC09F5C724DD49B600CE3AE0 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 		EC09F5C924DD4A7B00CE3AE0 /* LogoutButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoutButton.swift; sourceTree = "<group>"; };
 		EC09F5CB24DD4AAB00CE3AE0 /* LoggedOutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggedOutView.swift; sourceTree = "<group>"; };
+		EC09F5CE24DD4B9F00CE3AE0 /* NotesService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesService.swift; sourceTree = "<group>"; };
+		EC09F5D024DD4BCF00CE3AE0 /* NotesDiffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesDiffer.swift; sourceTree = "<group>"; };
+		EC09F5D224DD4C2000CE3AE0 /* Noted.bundle.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = Noted.bundle.js; path = js/dist/Noted.bundle.js; sourceTree = SOURCE_ROOT; };
+		EC09F5D424DD4FDE00CE3AE0 /* NotesToJsonService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesToJsonService.swift; sourceTree = "<group>"; };
 		EC7BF67124DC29DD004D8793 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
 		EC7BF67324DC3514004D8793 /* KeyboardResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardResponder.swift; sourceTree = "<group>"; };
 		EC7BF67524DC4E11004D8793 /* AuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -121,8 +129,11 @@
 		EC09F5CD24DD4AF800CE3AE0 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				EC09F5D024DD4BCF00CE3AE0 /* NotesDiffer.swift */,
+				EC09F5CE24DD4B9F00CE3AE0 /* NotesService.swift */,
 				EC7BF67524DC4E11004D8793 /* AuthService.swift */,
 				EC7BF67324DC3514004D8793 /* KeyboardResponder.swift */,
+				EC09F5D424DD4FDE00CE3AE0 /* NotesToJsonService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -164,6 +175,7 @@
 		EC98ABC224DBFF3C00265A10 /* Noted */ = {
 			isa = PBXGroup;
 			children = (
+				EC09F5D224DD4C2000CE3AE0 /* Noted.bundle.js */,
 				EC09F5CD24DD4AF800CE3AE0 /* Services */,
 				EC7BF67924DC59F9004D8793 /* Views */,
 				EC7BF67624DC4E11004D8793 /* Auth0.plist */,
@@ -315,6 +327,7 @@
 				EC98ABD524DBFF3D00265A10 /* LaunchScreen.storyboard in Resources */,
 				EC98ABD224DBFF3D00265A10 /* Preview Assets.xcassets in Resources */,
 				EC98ABCF24DBFF3D00265A10 /* Assets.xcassets in Resources */,
+				EC09F5D324DD4C2000CE3AE0 /* Noted.bundle.js in Resources */,
 				EC7BF67824DC4E11004D8793 /* Auth0.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -387,10 +400,13 @@
 				EC7BF67724DC4E11004D8793 /* AuthService.swift in Sources */,
 				EC7BF67224DC29DD004D8793 /* TextView.swift in Sources */,
 				EC7BF67B24DC5A27004D8793 /* NoteView.swift in Sources */,
+				EC09F5D124DD4BCF00CE3AE0 /* NotesDiffer.swift in Sources */,
 				EC09F5C824DD49B600CE3AE0 /* NotesView.swift in Sources */,
 				EC09F5CC24DD4AAB00CE3AE0 /* LoggedOutView.swift in Sources */,
+				EC09F5D524DD4FDE00CE3AE0 /* NotesToJsonService.swift in Sources */,
 				EC09F5CA24DD4A7B00CE3AE0 /* LogoutButton.swift in Sources */,
 				EC98ABC724DBFF3C00265A10 /* Noted.xcdatamodeld in Sources */,
+				EC09F5CF24DD4B9F00CE3AE0 /* NotesService.swift in Sources */,
 				EC7BF67424DC3514004D8793 /* KeyboardResponder.swift in Sources */,
 				EC98ABC424DBFF3C00265A10 /* AppDelegate.swift in Sources */,
 				EC98ABC924DBFF3C00265A10 /* SceneDelegate.swift in Sources */,

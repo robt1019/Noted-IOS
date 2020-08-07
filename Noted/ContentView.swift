@@ -13,26 +13,26 @@ struct ContentView: View {
     var viewContext
     
     @State var loggedIn = false
-    @State var initialised = false
+    
+    private var notes = NotesService.shared
     
     var body: some View {
         Group {
             if (self.loggedIn) {
                 NavigationView {
                     NotesView(onNoteUpdated: { note in
-                        Note.updateBody(note: note, body: note.body!, in: self.viewContext)
-                        Note.updateTitle(note: note, title: note.title!, in: self.viewContext)
+                        self.saveNoteToDevice(note: note)
+                        
+                        NotesToJson.localNotesToJson(context: self.viewContext)
                     })
                         .navigationBarTitle(Text("Notes"))
                         .navigationBarItems(
                             leading: LogoutButton(
                                 onLoggedOut: {
                                     self.loggedIn = false
-                                    print("logged out")
                             },
                                 onLogoutFailure: {
                                     self.loggedIn = true
-                                    print("logged in")
                             }),
                             trailing: Button(
                                 action: {
@@ -44,23 +44,36 @@ struct ContentView: View {
                     )
                 }.navigationViewStyle(DoubleColumnNavigationViewStyle())
             } else {
-                LoggedOutView(onLoggedIn: {
+                LoggedOutView(onLoggedIn: { token in
                     self.loggedIn = true
+                    self.notes.connectToSocket(token: token)
                 })
             }
         }.onAppear {
             self.determineIfLoggedIn()
+            self.listenForNotes()
         }
+    }
+    
+    func saveNoteToDevice(note: Note) {
+        Note.updateBody(note: note, body: note.body!, in: self.viewContext)
+        Note.updateTitle(note: note, title: note.title!, in: self.viewContext)
+    }
+    
+    func listenForNotes() {
+        self.notes.on(event: "notesUpdated", callback: {
+            diff in
+        })
     }
     
     func determineIfLoggedIn() {
         Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: {_ in
             AuthService.getAccessToken(accessTokenFound: {
                 token in
+                self.notes.connectToSocket(token: token)
                 self.loggedIn = true
             }, noAccessToken: {
                 self.loggedIn = false
-                self.initialised = true
             })
         })
     }
