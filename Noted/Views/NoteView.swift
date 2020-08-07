@@ -21,6 +21,8 @@ struct NoteView: View {
     @State var noteTitle = ""
     @State var noteBody = ""
     
+    @State var navBarHidden = true
+    
     let onNoteUpdated: (Note) -> Void
     
     var body: some View {
@@ -40,11 +42,11 @@ struct NoteView: View {
                 .frame(maxHeight: .infinity)
                 .padding(.leading, 11)
         }
+        .navigationBarTitle("").navigationBarHidden(self.navBarHidden)
         .padding()
         .padding(.bottom, keyboard.currentHeight + 16)
         .edgesIgnoringSafeArea(.bottom)
         .animation(.easeOut(duration: 0.16))
-        .navigationBarTitle("").navigationBarHidden(true)
         .onAppear {
             self.noteTitle = self.note.title!
             self.noteBody = self.note.body!
@@ -58,6 +60,12 @@ struct NoteView: View {
             self.note.title = self.noteTitle
             self.note.body = self.noteBody
             self.onNoteUpdated(self.note)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            self.navBarHidden = true
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willResignActiveNotification)) { _ in
+            self.navBarHidden = false
         }
     }
 }
