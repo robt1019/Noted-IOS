@@ -138,6 +138,14 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
+		EC09F5D624DD7ECC00CE3AE0 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				ECA1B53524DC111400FCD8E4 /* Note.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		EC7BF67924DC59F9004D8793 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -175,13 +183,13 @@
 		EC98ABC224DBFF3C00265A10 /* Noted */ = {
 			isa = PBXGroup;
 			children = (
+				EC09F5D624DD7ECC00CE3AE0 /* Models */,
 				EC09F5D224DD4C2000CE3AE0 /* Noted.bundle.js */,
 				EC09F5CD24DD4AF800CE3AE0 /* Services */,
 				EC7BF67924DC59F9004D8793 /* Views */,
 				EC7BF67624DC4E11004D8793 /* Auth0.plist */,
 				EC98ABC324DBFF3C00265A10 /* AppDelegate.swift */,
 				EC98ABC824DBFF3C00265A10 /* SceneDelegate.swift */,
-				ECA1B53524DC111400FCD8E4 /* Note.swift */,
 				EC98ABCC24DBFF3C00265A10 /* ContentView.swift */,
 				EC98ABCE24DBFF3D00265A10 /* Assets.xcassets */,
 				EC98ABD324DBFF3D00265A10 /* LaunchScreen.storyboard */,

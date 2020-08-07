@@ -23,7 +23,7 @@ struct NoteView: View {
     
     @State var navBarHidden = true
     
-    let onNoteUpdated: (Note) -> Void
+    let onNoteUpdated: (String, String, String) -> Void
     
     var body: some View {
         VStack (alignment: .leading) {
@@ -52,14 +52,11 @@ struct NoteView: View {
             self.noteBody = self.note.body!
         }
         .onDisappear {
-            self.note.title = self.noteTitle
-            self.note.body = self.noteBody
-            self.onNoteUpdated(self.note)
+            self.onNoteUpdated(self.note.id!, self.noteTitle, self.noteBody)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-            self.note.title = self.noteTitle
-            self.note.body = self.noteBody
-            self.onNoteUpdated(self.note)
+
+            self.onNoteUpdated(self.note.id!, self.noteTitle, self.noteBody)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             self.navBarHidden = true

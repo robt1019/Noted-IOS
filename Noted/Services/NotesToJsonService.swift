@@ -10,12 +10,12 @@ import Foundation
 import SwiftUI
 import CoreData
 
-struct JsonReadyNote: Codable {
+public struct JsonReadyNote: Codable {
     var title: String
     var body: String
 }
 
-class NotesToJson {
+class NotesToJsonService {
     
     static func localNotesToJson(context: NSManagedObjectContext) -> String {
         
@@ -25,12 +25,11 @@ class NotesToJson {
             let fetchedNotes = try context.fetch(notesFetch) as! [Note]
             let encodableNotes = fetchedNotes.reduce(into: Dictionary<String, JsonReadyNote>()) {
                 prev, curr in
-                prev[curr.id!.uuidString] = JsonReadyNote(title: curr.title!, body: curr.body!)
+                prev[curr.id] = JsonReadyNote(title: curr.title!, body: curr.body!)
             }
             do {
                 let jsonified = try JSONEncoder().encode(encodableNotes)
                 let jsonString = String(data: jsonified, encoding: .utf8)!
-                jsonToNotes(jsonString: jsonString)
                 return jsonString
             } catch {
                 fatalError("Failed to encode json: \(error)")
@@ -40,21 +39,13 @@ class NotesToJson {
             fatalError("Failed to fetch notes: \(error)")
         }
     }
-    
-//    static func jsonToNotes(jsonString: String) {
-//        let jsonData = jsonString.data(using: .utf8)!
-//        let decodedNotesDictionary = try! JSONDecoder().decode([String: JsonReadyNote].self, from: jsonData)
-//        var notesArray: [Note] = []
-//        
-//        decodedNotesDictionary.keys.forEach() {key in
-//            let note = Note()
-//            let dictionaryNote = decodedNotesDictionary[key]
-//            note.title = dictionaryNote?.title
-//            note.body = dictionaryNote?.body
-//            note.id = UUID(uuidString: key)
-//            notesArray.append(note)
-//        }
-//        
-//        print(notesArray)
-//    }
+        
+    static func jsonToNotesDictionary(jsonString: String) -> Dictionary<String, JsonReadyNote> {
+        if(jsonString == "null") {
+            return[:]
+        }
+        let jsonData = jsonString.data(using: .utf8)!
+        let decodedNotesDictionary = try! JSONDecoder().decode([String: JsonReadyNote].self, from: jsonData)
+        return decodedNotesDictionary
+    }
 }

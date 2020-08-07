@@ -17,29 +17,57 @@ open class NotesService {
     private var socket: SocketIOClient? = nil
     private var connected = false
     private var localNotes = ""
-
-    private var onNotesUpdated: ((Any) -> Void)? = nil
     
-    public func saveNotes(notes: String, prev: String, online: Bool) {
-        let diff = NotesDiffer.shared.diff(notes1: prev, notes2: notes)
-        if (online) {
-            let payload = [
-                "diff": diff,
+    private var _onNoteUpdated: ((String, Any, Any) -> Void)? = nil
+    private var _onInitialNotes: ((Dictionary<String, JsonReadyNote>) -> Void)? = nil
+    private var _onNoteDeleted: ((String) -> Void)? = nil
+    
+    public func saveNote(id: String, title: String, body: String, prevNote: Note? ) {
+        if (prevNote != nil) {
+            print("previous note found")
+            let titleDiff = NotesDiffer.shared.diff(notes1: prevNote!.title!, notes2: title)
+            let bodyDiff = NotesDiffer.shared.diff(notes1: prevNote!.body!, notes2: body)
+            print("titleDiff: \(titleDiff)")
+            print("bodyDiff: \(bodyDiff)")
+            let payload: [String: Any] = [
+                "id": id,
+                "title": titleDiff,
+                "body": bodyDiff,
             ]
-            self.socket?.emit("updateNotes", payload)
+            print(payload)
+            self.socket?.emit("updateNote", payload)
         } else {
-            let defaults = UserDefaults.standard
-            var offlineChanges = defaults.array(forKey: "OfflineChanges") ?? [[String]]()
-            offlineChanges.append([prev, notes])
-            defaults.set(offlineChanges, forKey: "OfflineChanges")
+            print("new note being created")
+            let titleDiff = NotesDiffer.shared.diff(notes1: "", notes2: title)
+            let bodyDiff = NotesDiffer.shared.diff(notes1: "", notes2: body)
+            print("titleDiff: \(titleDiff)")
+            print("bodyDiff: \(bodyDiff)")
+            let payload: [String: Any] = [
+                "id": id,
+                "title": titleDiff,
+                "body": bodyDiff,
+            ]
+            print(payload)
+            self.socket?.emit("updateNote", payload)
         }
     }
     
-    public func on(event: String, callback: @escaping (Any) -> Void) {
-        if(event == "notesUpdated") {
-            self.onNotesUpdated = callback
-            print("notesUpdated callback registered")
-        }
+    public func deleteNote(id: String) {
+        self.socket?.emit("deleteNote", id)
+    }
+    
+    public func onNoteDeleted(callback: @escaping (String) -> Void) {
+        self._onNoteDeleted = callback
+    }
+    
+    public func onNoteUpdated(callback: @escaping (String, Any, Any) -> Void) {
+        self._onNoteUpdated = callback
+        print("noteUpdated callback registered")
+    }
+    
+    public func onInitialNotes(callback: @escaping(Dictionary<String, JsonReadyNote>) -> Void) {
+        self._onInitialNotes = callback
+        print("onInitialNotes callback registered")
     }
     
     public func connectToSocket(token: String, initialNotes: String = "") {
@@ -55,11 +83,18 @@ open class NotesService {
         
         self.socket?.connect()
         
-        self.socket?.on("notesUpdated") {data, ack in
-            print("notes received")
-            let jsonDict = data[0] as? NSDictionary
-            let diff = jsonDict?["diff"] as! String
-            self.onNotesUpdated!(diff)
+        self.socket?.on("noteUpdated") {data, ack in
+            print("note update received")
+            let jsonData = data[0] as! NSDictionary
+            let id = jsonData["id"]
+            let title = jsonData["title"]
+            let body = jsonData["body"]
+            self._onNoteUpdated!(id as! String, title, body)
+        }
+        
+        self.socket?.on("noteDeleted") {data, ack in
+            print("note deletion received")
+            self._onNoteDeleted!(data[0] as! String)
         }
         
         self.socket?.on(clientEvent: .connect) {data, ack in
@@ -75,15 +110,15 @@ open class NotesService {
             
             self.socket?.once("authenticated", callback: { _, _ in
                 print("authenticated")
-
+                
                 self.socket?.once("initialNotes") {data, ack in
                     print("initial notes received")
-                    let jsonDict = data[0] as? NSDictionary
-                    let notes = jsonDict?["content"] as! String
-                    if(UserDefaults.standard.array(forKey: "OfflineChanges")?.count ?? 0 > 0) {
-                        self.processOfflineChanges()
+                    let stringifiedJson = data[0] as? String
+                    if (stringifiedJson != nil) {
+                        self._onInitialNotes!(NotesToJsonService.jsonToNotesDictionary(jsonString: stringifiedJson!))
                     } else {
-                        self.onNotesUpdated!(NotesDiffer.shared.diff(notes1: self.localNotes, notes2: notes))
+                        print("user has no notes")
+                        self._onInitialNotes!([:])
                     }
                 }
             });
@@ -106,18 +141,5 @@ open class NotesService {
     public func restart(localNotes: String) {
         self.localNotes = localNotes
         self.socket?.connect()
-    }
-    
-    public func processOfflineChanges() {
-        let defaults = UserDefaults.standard
-        let offlineChanges = defaults.array(forKey: "OfflineChanges") ?? [[String]]()
-        for change in offlineChanges {
-            let changeArray = change as! [String]
-            print("updating notes?")
-            let prev = changeArray[0]
-            let notes = changeArray[1]
-            self.saveNotes(notes: notes, prev: prev, online: true)
-        }
-        defaults.set([], forKey: "OfflineChanges")
     }
 }
