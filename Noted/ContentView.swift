@@ -38,13 +38,15 @@ struct ContentView: View {
                             }),
                             trailing: Button(
                                 action: {
-                                    withAnimation { Note.create(in: self.viewContext, title: "New note...", body: "body...") }
+                                    withAnimation {
+                                        Note.create(in: self.viewContext)
+                                    }
                             }
                             ) {
                                 Image(systemName: "plus")
                             }.padding()
                     )
-                }.navigationViewStyle(DoubleColumnNavigationViewStyle())
+                }.navigationViewStyle(StackNavigationViewStyle())
             } else {
                 LoggedOutView(onLoggedIn: { token in
                     self.loggedIn = true
