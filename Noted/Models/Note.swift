@@ -89,6 +89,21 @@ extension Note {
         }
     }
     
+    public static func deleteAllNotesApartFrom(ids: [String], in managedObjectContext: NSManagedObjectContext) {
+        print("deleting all notes apart from \(ids)")
+        let notesFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Note")
+        notesFetch.predicate = NSPredicate(format: "NOT id IN %@", ids)
+        do {
+            let fetchedNotes = try managedObjectContext.fetch(notesFetch) as! [Note]
+            fetchedNotes.forEach { note in
+                managedObjectContext.delete(note)
+            }
+            try managedObjectContext.save()
+        } catch {
+            fatalError("Failed to fetch note by id: \(error)")
+        }
+    }
+    
     public static func deleteNote(note: Note, in managedObjectContext: NSManagedObjectContext) {
         managedObjectContext.delete(note)
         do {

@@ -16,7 +16,6 @@ open class NotesService {
     private var socketManager: SocketManager? = nil
     private var socket: SocketIOClient? = nil
     private var connected = false
-    private var localNotes = ""
     
     private var _onNoteUpdated: ((String, Any, Any) -> Void)? = nil
     private var _onInitialNotes: ((Dictionary<String, JsonReadyNote>) -> Void)? = nil
@@ -71,8 +70,6 @@ open class NotesService {
     }
     
     public func connectToSocket(token: String, initialNotes: String = "") {
-        
-        self.localNotes = initialNotes
         
         self.socket?.disconnect()
         
@@ -136,10 +133,5 @@ open class NotesService {
             }
             
         }
-    }
-    
-    public func restart(localNotes: String) {
-        self.localNotes = localNotes
-        self.socket?.connect()
     }
 }

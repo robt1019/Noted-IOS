@@ -74,6 +74,7 @@ struct ContentView: View {
             noteId in
             let note = Note.noteById(id: noteId, in: self.viewContext)
             if(note != nil) {
+                print("deleting note")
                 Note.deleteNote(note: note!, in: self.viewContext)
             }
         }
@@ -105,10 +106,11 @@ struct ContentView: View {
         self.notes.onInitialNotes(callback: {
             initialNotes in
             print(initialNotes)
+            Note.deleteAllNotesApartFrom(ids: [String] (initialNotes.keys), in: self.viewContext)
             initialNotes.keys.forEach { noteId in
                 print(noteId)
                 let newServerNote = initialNotes[noteId]
-                let note = Note.noteById(id: noteId, in: self.viewContext)
+                let note = Note.noteById(id: noteId, in: self.viewContext)  
                 if (note != nil) {
                     print("found existing note to update")
                     print(note?.title)
