@@ -55,6 +55,7 @@ struct ContentView: View {
                 } else {
                     LoggedOutView(onLoggedIn: { token in
                         self.loggedIn = true
+                        self.initialised = false
                         self.notes.connectToSocket(token: token, context: self.viewContext)
                     })
                 }
