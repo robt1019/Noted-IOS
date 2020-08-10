@@ -40,7 +40,7 @@ struct ContentView: View {
                                 trailing: Button(
                                     action: {
                                         withAnimation {
-                                            Note.create(in: self.viewContext)
+                                            self.saveNoteToServer(id: UUID().uuidString, title: "New Note...", body: "Here is a body!")
                                         }
                                 }
                                 ) {
@@ -76,7 +76,16 @@ struct ContentView: View {
     func saveNoteToServer(id: String, title: String, body: String) {
         let prevNote = Note.noteById(id: id, in: self.viewContext)
         if(!(prevNote?.title == title && prevNote?.body == body)) {
-            self.notes.saveNote(id: id, title: title, body: body, prevNote: prevNote)
+            self.notes.updateNote(id: id, title: title, body: body, prevNote: prevNote)
+        }
+        if(prevNote == nil) {
+            self.notes.createNote(id: id, title: title, body: body)
+        }
+    }
+    
+    func listenForNoteCreations() {
+        self.notes.onNoteCreated { id, title, body in
+            Note.create(in: self.viewContext, noteId: id, title: title, body: body)
         }
     }
     

@@ -16,12 +16,22 @@ open class NotesService {
     private var socketManager: SocketManager? = nil
     private var socket: SocketIOClient? = nil
     private var connected = false
-    
+
+    private var _onNoteCreated: ((String, String, String) -> Void)? = nil
     private var _onNoteUpdated: ((String, Any, Any) -> Void)? = nil
     private var _onInitialNotes: ((Dictionary<String, JsonReadyNote>) -> Void)? = nil
     private var _onNoteDeleted: ((String) -> Void)? = nil
     
-    public func saveNote(id: String, title: String, body: String, prevNote: Note? ) {
+    public func createNote(id: String, title: String, body: String) {
+        let payload: [String: Any] = [
+            "id": id,
+            "title": title,
+            "body": body,
+        ]
+        self.socket?.emit("createNote", payload)
+    }
+    
+    public func updateNote(id: String, title: String, body: String, prevNote: Note? ) {
         if (prevNote != nil) {
             let titleDiff = NotesDiffer.shared.diff(notes1: prevNote!.title!, notes2: title)
             let bodyDiff = NotesDiffer.shared.diff(notes1: prevNote!.body!, notes2: body)
@@ -45,6 +55,10 @@ open class NotesService {
     
     public func deleteNote(id: String) {
         self.socket?.emit("deleteNote", id)
+    }
+    
+    public func onNoteCreated(callback: @escaping (String, String, String) -> Void) {
+        self._onNoteCreated = callback
     }
     
     public func onNoteDeleted(callback: @escaping (String) -> Void) {
