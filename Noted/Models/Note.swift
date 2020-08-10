@@ -17,12 +17,9 @@ extension Note {
         
         do {
             let fetchedNotes = try context.fetch(serverNotesFetch) as! [Note]
-            print(fetchedNotes)
             if(fetchedNotes.count > 0) {
-                print("found a note")
                 return fetchedNotes[0]
             } else {
-                print("no note found")
                 return nil
             }
         } catch {
@@ -90,7 +87,6 @@ extension Note {
     }
     
     public static func deleteAllNotesApartFrom(ids: [String], in managedObjectContext: NSManagedObjectContext) {
-        print("deleting all notes apart from \(ids)")
         let notesFetch = NSFetchRequest<NSFetchRequestResult>(entityName: "Note")
         notesFetch.predicate = NSPredicate(format: "NOT id IN %@", ids)
         do {

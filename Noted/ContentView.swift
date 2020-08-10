@@ -25,9 +25,6 @@ struct ContentView: View {
                 if (self.loggedIn) {
                     NavigationView {
                         NotesView(onNoteUpdated: { id, title, body in
-                            print(id)
-                            print(title)
-                            print(body)
                             self.saveNoteToServer(id: id, title: title, body: body)
                         })
                             .navigationBarTitle(Text("Notes"))
@@ -88,7 +85,6 @@ struct ContentView: View {
             noteId in
             let note = Note.noteById(id: noteId, in: self.viewContext)
             if(note != nil) {
-                print("deleting note")
                 Note.deleteNote(note: note!, in: self.viewContext)
             }
         }
@@ -97,8 +93,6 @@ struct ContentView: View {
     func listenForNoteChanges() {
         self.notes.onNoteUpdated {
             id, titleDiff, bodyDiff in
-            
-            print("new notes coming in")
             
             let note = Note.noteById(id: id, in: self.viewContext)
             
@@ -121,7 +115,6 @@ struct ContentView: View {
             initialNotes in
             Note.deleteAllNotesApartFrom(ids: [String] (initialNotes.keys), in: self.viewContext)
             initialNotes.keys.forEach { noteId in
-                print(noteId)
                 let newServerNote = initialNotes[noteId]
                 let note = Note.noteById(id: noteId, in: self.viewContext)  
                 if (note != nil) {
