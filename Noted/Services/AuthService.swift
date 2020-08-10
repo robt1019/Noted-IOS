@@ -11,6 +11,11 @@ import Auth0
 
 class AuthService {
     
+    static func hasCredentials() -> Bool {
+        let credentialsManager = CredentialsManager(authentication: Auth0.authentication())
+        return credentialsManager.hasValid()
+    }
+    
     static func login(onSuccess: @escaping (Credentials) -> Void, onFailure: @escaping () -> Void) {
         print("logging in")
         Auth0

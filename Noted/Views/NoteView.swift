@@ -31,7 +31,7 @@ struct NoteView: View {
                 self.presentationMode.wrappedValue.dismiss()
             }) {
                 Image(systemName: "chevron.left")
-                Text(" Notes")
+                Text("Notes")
             }
             
             TextField("", text: $noteTitle)
@@ -55,7 +55,6 @@ struct NoteView: View {
             self.onNoteUpdated(self.note.id!, self.noteTitle, self.noteBody)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-
             self.onNoteUpdated(self.note.id!, self.noteTitle, self.noteBody)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
