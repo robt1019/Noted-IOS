@@ -8,6 +8,8 @@
 
 import Foundation
 import SocketIO
+import Network
+import CoreData
 
 open class NotesService {
     
@@ -22,13 +24,29 @@ open class NotesService {
     private var _onInitialNotes: ((Dictionary<String, JsonReadyNote>) -> Void)? = nil
     private var _onNoteDeleted: ((String) -> Void)? = nil
     
-    public func createNote(id: String, title: String, body: String) {
+    private let monitor = NWPathMonitor()
+    private let queue = DispatchQueue(label: "Monitor")
+    private var online = false
+    
+    init() {
+        self.monitorOnlineStatus()
+    }
+    
+    public func reconnect() {
+        self.socket?.connect()
+    }
+    
+    public func createNote(id: String, title: String, body: String, context: NSManagedObjectContext) {
         let payload: [String: Any] = [
             "id": id,
             "title": title,
             "body": body,
         ]
-        self.socket?.emit("createNote", payload)
+        if (self.online) {
+            self.socket?.emit("createNote", payload)
+        } else {
+            OfflineChanges.createNote(id: id, title: title, body: body, context: context)
+        }
     }
     
     public func updateNote(id: String, title: String, body: String, prevNote: Note? ) {
@@ -73,7 +91,7 @@ open class NotesService {
         self._onInitialNotes = callback
     }
     
-    public func connectToSocket(token: String, initialNotes: String = "") {
+    public func connectToSocket(token: String, context: NSManagedObjectContext) {
         
         self.socket?.disconnect()
         
@@ -82,12 +100,20 @@ open class NotesService {
                 
         self.socket?.connect()
         
+        self.socket?.on("noteCreated") {data, ack in
+            let jsonData = data[0] as! NSDictionary
+            let id = jsonData["id"]
+            let title = jsonData["title"]
+            let body = jsonData["body"]
+            self._onNoteCreated!(id as! String, title as! String, body as! String)
+        }
+        
         self.socket?.on("noteUpdated") {data, ack in
             let jsonData = data[0] as! NSDictionary
             let id = jsonData["id"]
             let title = jsonData["title"]
             let body = jsonData["body"]
-            self._onNoteUpdated!(id as! String, title, body)
+            self._onNoteUpdated!(id as! String, title as Any, body as Any)
         }
         
         self.socket?.on("noteDeleted") {data, ack in
@@ -103,6 +129,9 @@ open class NotesService {
             
             self.socket?.once("authenticated", callback: { _, _ in
                 self.socket?.once("initialNotes") {data, ack in
+                    
+                    OfflineChanges.processOfflineUpdates(socket: self.socket, context: context)
+                    
                     let stringifiedJson = data[0] as? String
                     if (stringifiedJson != nil) {
                         self._onInitialNotes!(NotesToJsonService.jsonToNotesDictionary(jsonString: stringifiedJson!))
@@ -123,5 +152,17 @@ open class NotesService {
             }
             
         }
+    }
+    
+    private func monitorOnlineStatus() {
+        self.monitor.pathUpdateHandler = { path in
+            if (path.status == .satisfied) {
+                self.socket?.connect()
+                self.online = true
+            } else {
+                self.online = false
+            }
+        }
+        self.monitor.start(queue: self.queue)
     }
 }

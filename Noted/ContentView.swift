@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import Network
 
 struct ContentView: View {
     @Environment(\.managedObjectContext)
@@ -17,6 +18,9 @@ struct ContentView: View {
     @State var loggedIn = false
     @State var initialised = false
     
+    private let monitor = NWPathMonitor()
+    private let queue = DispatchQueue(label: "Monitor")
+    
     private var notes = NotesService.shared
     
     var body: some View {
@@ -25,7 +29,7 @@ struct ContentView: View {
                 if (self.loggedIn) {
                     NavigationView {
                         NotesView(onNoteUpdated: { id, title, body in
-                            self.saveNoteToServer(id: id, title: title, body: body)
+                            self.updateNote(id: id, title: title, body: body)
                         })
                             .navigationBarTitle(Text("Notes"))
                             .navigationBarItems(
@@ -40,7 +44,7 @@ struct ContentView: View {
                                 trailing: Button(
                                     action: {
                                         withAnimation {
-                                            self.saveNoteToServer(id: UUID().uuidString, title: "New Note...", body: "Here is a body!")
+                                            self.createNote()
                                         }
                                 }
                                 ) {
@@ -51,7 +55,7 @@ struct ContentView: View {
                 } else {
                     LoggedOutView(onLoggedIn: { token in
                         self.loggedIn = true
-                        self.notes.connectToSocket(token: token)
+                        self.notes.connectToSocket(token: token, context: self.viewContext)
                     })
                 }
             } else {
@@ -68,18 +72,20 @@ struct ContentView: View {
                 self.initialised = true
             }
             self.listenForInitialNotes()
+            self.listenForNoteCreations()
             self.listenForNoteChanges()
             self.listenForNoteDeletions()
         }
     }
     
-    func saveNoteToServer(id: String, title: String, body: String) {
+    func createNote() {
+        self.notes.createNote(id: UUID().uuidString, title: "New Note...", body: "Here is a body!", context: self.viewContext)
+    }
+    
+    func updateNote(id: String, title: String, body: String) {
         let prevNote = Note.noteById(id: id, in: self.viewContext)
-        if(!(prevNote?.title == title && prevNote?.body == body)) {
+        if(prevNote != nil && !(prevNote?.title == title && prevNote?.body == body)) {
             self.notes.updateNote(id: id, title: title, body: body, prevNote: prevNote)
-        }
-        if(prevNote == nil) {
-            self.notes.createNote(id: id, title: title, body: body)
         }
     }
     
@@ -104,18 +110,12 @@ struct ContentView: View {
             id, titleDiff, bodyDiff in
             
             let note = Note.noteById(id: id, in: self.viewContext)
+        
+            let newTitle = NotesDiffer.shared.patch(notes1: note!.title!, diff: titleDiff)
+            let newBody = NotesDiffer.shared.patch(notes1: note!.body!, diff: bodyDiff)
             
-            if (note != nil) {
-                let newTitle = NotesDiffer.shared.patch(notes1: note!.title!, diff: titleDiff)
-                let newBody = NotesDiffer.shared.patch(notes1: note!.body!, diff: bodyDiff)
-                
-                Note.updateTitle(note: note!, title: newTitle, in: self.viewContext)
-                Note.updateBody(note: note!, body: newBody, in: self.viewContext)
-            } else {
-                let newTitle = NotesDiffer.shared.patch(notes1: "", diff: titleDiff)
-                let newBody = NotesDiffer.shared.patch(notes1: "", diff: bodyDiff)
-                Note.create(in: self.viewContext, noteId: id, title: newTitle, body: newBody)
-            }
+            Note.updateTitle(note: note!, title: newTitle, in: self.viewContext)
+            Note.updateBody(note: note!, body: newBody, in: self.viewContext)
         }
     }
     
@@ -149,7 +149,7 @@ struct ContentView: View {
         Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: {_ in
             AuthService.getAccessToken(accessTokenFound: {
                 token in
-                self.notes.connectToSocket(token: token)
+                self.notes.connectToSocket(token: token, context: self.viewContext)
                 self.loggedIn = true
             }, noAccessToken: {
                 self.loggedIn = false

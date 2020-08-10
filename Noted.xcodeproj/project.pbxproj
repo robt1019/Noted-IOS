@@ -30,6 +30,7 @@
 		EC98ABE024DBFF3D00265A10 /* NotedTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC98ABDF24DBFF3D00265A10 /* NotedTests.swift */; };
 		EC98ABEB24DBFF3D00265A10 /* NotedUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC98ABEA24DBFF3D00265A10 /* NotedUITests.swift */; };
 		ECA1B53624DC111400FCD8E4 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA1B53524DC111400FCD8E4 /* Note.swift */; };
+		ECF8C82324E1636C001F2BB9 /* OfflineChanges.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF8C82224E1636C001F2BB9 /* OfflineChanges.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +82,7 @@
 		EC98ABEA24DBFF3D00265A10 /* NotedUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotedUITests.swift; sourceTree = "<group>"; };
 		EC98ABEC24DBFF3D00265A10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ECA1B53524DC111400FCD8E4 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		ECF8C82224E1636C001F2BB9 /* OfflineChanges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfflineChanges.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,6 +136,7 @@
 				EC7BF67524DC4E11004D8793 /* AuthService.swift */,
 				EC7BF67324DC3514004D8793 /* KeyboardResponder.swift */,
 				EC09F5D424DD4FDE00CE3AE0 /* NotesToJsonService.swift */,
+				ECF8C82224E1636C001F2BB9 /* OfflineChanges.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -414,6 +417,7 @@
 				EC09F5D524DD4FDE00CE3AE0 /* NotesToJsonService.swift in Sources */,
 				EC09F5CA24DD4A7B00CE3AE0 /* LogoutButton.swift in Sources */,
 				EC98ABC724DBFF3C00265A10 /* Noted.xcdatamodeld in Sources */,
+				ECF8C82324E1636C001F2BB9 /* OfflineChanges.swift in Sources */,
 				EC09F5CF24DD4B9F00CE3AE0 /* NotesService.swift in Sources */,
 				EC7BF67424DC3514004D8793 /* KeyboardResponder.swift in Sources */,
 				EC98ABC424DBFF3C00265A10 /* AppDelegate.swift in Sources */,

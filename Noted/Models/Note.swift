@@ -32,7 +32,6 @@ extension Note {
         newNote.id = noteId ?? UUID().uuidString
         newNote.title = title ?? ""
         newNote.body = body ?? ""
-        
         do {
             try  managedObjectContext.save()
             return newNote
