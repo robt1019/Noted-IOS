@@ -113,9 +113,9 @@ extension Note {
 }
 
 extension Collection where Element == Note, Index == Int {
-    func delete(at indices: IndexSet) {
+    func delete(at indices: IndexSet, in managedObjectContext: NSManagedObjectContext) {
         indices.forEach {
-            NotesService.shared.deleteNote(id: self[$0].id!)
+            NotesService.shared.deleteNote(id: self[$0].id!, context: managedObjectContext)
         }
     }
 }

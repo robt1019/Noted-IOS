@@ -15,32 +15,47 @@ public class OfflineChanges {
     private static let key: String = "offlineUpdates"
     private static let defaults = UserDefaults.standard
     
-    @Environment(\.managedObjectContext)
-    private static var viewContext
     
-    public static func createNote(id: String, title: String, body: String, context: NSManagedObjectContext) {
+    public static func createNote(payload: Any) {
         var offlineUpdates = defaults.array(forKey: key)
-        let action = ["createNote", id, title, body]
+        let action = ["createNote", payload]
         if (offlineUpdates != nil) {
             offlineUpdates!.append(action)
         } else {
             offlineUpdates = [action]
         }
         defaults.set(offlineUpdates, forKey: key)
-        Note.create(in: context, noteId: id, title: title, body: body)
     }
     
-    public static func processOfflineUpdates(socket: SocketIOClient?, context: NSManagedObjectContext) {
+    public static func updateNote(payload: Any) {
+        var offlineUpdates = defaults.array(forKey: key)
+        let action = ["updateNote", payload]
+        if (offlineUpdates != nil) {
+            offlineUpdates!.append(action)
+        } else {
+            offlineUpdates = [action]
+        }
+        defaults.set(offlineUpdates, forKey: key)
+    }
+    
+    public static func deleteNote(payload: Any) {
+        var offlineUpdates = defaults.array(forKey: key)
+        let action = ["deleteNote", payload]
+        if (offlineUpdates != nil) {
+            offlineUpdates!.append(action)
+        } else {
+            offlineUpdates = [action]
+        }
+        defaults.set(offlineUpdates, forKey: key)
+    }
+    
+    public static func processOfflineUpdates(socket: SocketIOClient?) {
         let offlineUpdates: [[Any]]? = defaults.array(forKey: key) as? [[Any]]
         if (offlineUpdates != nil) {
             offlineUpdates!.forEach { update in
                 let action = update[0]
-                if (action as! String == "createNote") {
-                    let id = update[1]
-                    let title = update[2]
-                    let body = update[3]
-                    NotesService.shared.createNote(id: id as! String, title: title as! String, body: body as! String, context: context)
-                }
+                let payload = update[1]
+                socket?.emit(action as! String, payload as! SocketData)
             }
         }
         

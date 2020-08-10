@@ -84,8 +84,8 @@ struct ContentView: View {
     
     func updateNote(id: String, title: String, body: String) {
         let prevNote = Note.noteById(id: id, in: self.viewContext)
-        if(prevNote != nil && !(prevNote?.title == title && prevNote?.body == body)) {
-            self.notes.updateNote(id: id, title: title, body: body, prevNote: prevNote)
+        if (!(prevNote?.title == title && prevNote?.body == body)) {
+            self.notes.updateNote(id: id, title: title, body: body, prevNote: prevNote!, context: self.viewContext)
         }
     }
     

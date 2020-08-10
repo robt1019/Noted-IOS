@@ -10,7 +10,7 @@ import SwiftUI
 
 struct NotesView: View {
     
-    @FetchRequest(sortDescriptors: [])
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Note.title, ascending: true)])
     var notes: FetchedResults<Note>
     
     @Environment(\.managedObjectContext)
@@ -27,7 +27,7 @@ struct NotesView: View {
                     Text(note.title!)
                 }
             }.onDelete { indices in
-                self.notes.delete(at: indices)
+                self.notes.delete(at: indices, in: self.viewContext)
             }
         }
     }

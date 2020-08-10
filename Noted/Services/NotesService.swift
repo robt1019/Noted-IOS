@@ -18,7 +18,7 @@ open class NotesService {
     private var socketManager: SocketManager? = nil
     private var socket: SocketIOClient? = nil
     private var connected = false
-
+    
     private var _onNoteCreated: ((String, String, String) -> Void)? = nil
     private var _onNoteUpdated: ((String, Any, Any) -> Void)? = nil
     private var _onInitialNotes: ((Dictionary<String, JsonReadyNote>) -> Void)? = nil
@@ -45,34 +45,37 @@ open class NotesService {
         if (self.online) {
             self.socket?.emit("createNote", payload)
         } else {
-            OfflineChanges.createNote(id: id, title: title, body: body, context: context)
+            Note.create(in: context, noteId: id, title: title, body: body)
+            OfflineChanges.createNote(payload: payload)
         }
     }
     
-    public func updateNote(id: String, title: String, body: String, prevNote: Note? ) {
-        if (prevNote != nil) {
-            let titleDiff = NotesDiffer.shared.diff(notes1: prevNote!.title!, notes2: title)
-            let bodyDiff = NotesDiffer.shared.diff(notes1: prevNote!.body!, notes2: body)
-            let payload: [String: Any] = [
-                "id": id,
-                "title": titleDiff,
-                "body": bodyDiff,
-            ]
+    public func updateNote(id: String, title: String, body: String, prevNote: Note, context: NSManagedObjectContext) {
+        let titleDiff = NotesDiffer.shared.diff(notes1: prevNote.title!, notes2: title)
+        let bodyDiff = NotesDiffer.shared.diff(notes1: prevNote.body!, notes2: body)
+        let payload: [String: Any] = [
+            "id": id,
+            "title": titleDiff,
+            "body": bodyDiff,
+        ]
+        if (self.online) {
             self.socket?.emit("updateNote", payload)
         } else {
-            let titleDiff = NotesDiffer.shared.diff(notes1: "", notes2: title)
-            let bodyDiff = NotesDiffer.shared.diff(notes1: "", notes2: body)
-            let payload: [String: Any] = [
-                "id": id,
-                "title": titleDiff,
-                "body": bodyDiff,
-            ]
-            self.socket?.emit("updateNote", payload)
+            let note = Note.noteById(id: id, in: context)
+            Note.updateTitle(note: note!, title: title, in: context)
+            Note.updateBody(note: note!, body: body, in: context)
+            OfflineChanges.updateNote(payload: payload)
         }
     }
     
-    public func deleteNote(id: String) {
-        self.socket?.emit("deleteNote", id)
+    public func deleteNote(id: String, context: NSManagedObjectContext) {
+        if (self.online) {
+            self.socket?.emit("deleteNote", id)
+        } else {
+            let note = Note.noteById(id: id, in: context)
+            Note.deleteNote(note: note!, in: context)
+            OfflineChanges.deleteNote(payload: id)
+        }
     }
     
     public func onNoteCreated(callback: @escaping (String, String, String) -> Void) {
@@ -97,7 +100,7 @@ open class NotesService {
         
         self.socketManager = SocketManager(socketURL: URL(string: "https://glacial-badlands-85832.herokuapp.com")!, config: [.log(false), .compress])
         self.socket = self.socketManager?.defaultSocket
-                
+        
         self.socket?.connect()
         
         self.socket?.on("noteCreated") {data, ack in
@@ -130,7 +133,7 @@ open class NotesService {
             self.socket?.once("authenticated", callback: { _, _ in
                 self.socket?.once("initialNotes") {data, ack in
                     
-                    OfflineChanges.processOfflineUpdates(socket: self.socket, context: context)
+                    OfflineChanges.processOfflineUpdates(socket: self.socket)
                     
                     let stringifiedJson = data[0] as? String
                     if (stringifiedJson != nil) {
