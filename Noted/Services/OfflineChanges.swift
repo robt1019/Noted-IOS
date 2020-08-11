@@ -49,14 +49,15 @@ public class OfflineChanges {
         defaults.set(offlineUpdates, forKey: key)
     }
     
-    public static func processOfflineUpdates(socket: SocketIOClient?) {
+    public static func processOfflineUpdates(socket: SocketIOClient?, done: @escaping () -> Void) {
         let offlineUpdates: [[Any]]? = defaults.array(forKey: key) as? [[Any]]
-        if (offlineUpdates != nil) {
-            offlineUpdates!.forEach { update in
-                let action = update[0]
-                let payload = update[1]
-                socket?.emit(action as! String, payload as! SocketData)
+        if (offlineUpdates != nil && offlineUpdates?.count ?? 0 > 0) {
+            socket?.emit("offlineUpdates", offlineUpdates!)
+            socket?.once("offlineUpdatesProcessed") { data, ack in
+                done()
             }
+        } else {
+            done()
         }
         
         defaults.set([], forKey: key)

@@ -80,14 +80,13 @@ struct ContentView: View {
     }
     
     func createNote() {
-        self.notes.createNote(id: UUID().uuidString, title: "New Note...", body: "Here is a body!", context: self.viewContext)
+        self.notes.createNote(id: UUID().uuidString, title: "New...", body: "Body...", context: self.viewContext)
     }
     
     func updateNote(id: String, title: String, body: String) {
         let prevNote = Note.noteById(id: id, in: self.viewContext)
-        if (!(prevNote?.title == title && prevNote?.body == body)) {
             self.notes.updateNote(id: id, title: title, body: body, prevNote: prevNote!, context: self.viewContext)
-        }
+        
     }
     
     func listenForNoteCreations() {
@@ -123,7 +122,6 @@ struct ContentView: View {
     func listenForInitialNotes() {
         self.notes.onInitialNotes(callback: {
             initialNotes in
-            Note.deleteAllNotesApartFrom(ids: [String] (initialNotes.keys), in: self.viewContext)
             initialNotes.keys.forEach { noteId in
                 let newServerNote = initialNotes[noteId]
                 let note = Note.noteById(id: noteId, in: self.viewContext)  
@@ -139,8 +137,9 @@ struct ContentView: View {
                 } else {
                     Note.create(in: self.viewContext, noteId: noteId, title: newServerNote?.title, body: newServerNote?.body)
                 }
-                
             }
+            
+            Note.deleteAllNotesApartFrom(ids: [String] (initialNotes.keys), in: self.viewContext)
 
             self.initialised = true
         })

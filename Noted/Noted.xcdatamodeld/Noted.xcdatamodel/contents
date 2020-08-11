@@ -4,6 +4,11 @@
         <attribute name="body" attributeType="String" defaultValueString=""/>
         <attribute name="id" attributeType="String"/>
         <attribute name="title" attributeType="String" defaultValueString=""/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
         <userInfo/>
     </entity>
     <elements>

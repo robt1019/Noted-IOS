@@ -131,10 +131,12 @@ open class NotesService {
             }, noAccessToken: {})
             
             self.socket?.once("authenticated", callback: { _, _ in
+                
+                OfflineChanges.processOfflineUpdates(socket: self.socket) {
+                    self.socket?.emit("getInitialNotes")
+                }
+                
                 self.socket?.once("initialNotes") {data, ack in
-                    
-                    OfflineChanges.processOfflineUpdates(socket: self.socket)
-                    
                     let stringifiedJson = data[0] as? String
                     if (stringifiedJson != nil) {
                         self._onInitialNotes!(NotesToJsonService.jsonToNotesDictionary(jsonString: stringifiedJson!))
