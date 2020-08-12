@@ -17,7 +17,7 @@ open class NotesService {
     
     private var socketManager: SocketManager? = nil
     private var socket: SocketIOClient? = nil
-    private var connected = false
+    private var authenticated = false
     
     private var _onNoteCreated: ((String, String, String) -> Void)? = nil
     private var _onNoteUpdated: ((String, Any, Any) -> Void)? = nil
@@ -26,7 +26,7 @@ open class NotesService {
     
     private let monitor = NWPathMonitor()
     private let queue = DispatchQueue(label: "Monitor")
-    private var online = false
+    public var online = false
     
     init() {
         self.monitorOnlineStatus()
@@ -94,7 +94,7 @@ open class NotesService {
         self._onInitialNotes = callback
     }
     
-    public func connectToSocket(token: String, context: NSManagedObjectContext) {
+    public func connectToSocket(token: String) {
         
         self.socket?.disconnect()
         
@@ -124,7 +124,7 @@ open class NotesService {
         }
         
         self.socket?.on(clientEvent: .connect) {data, ack in
-            self.connected = true;
+            self.authenticated = true;
             
             AuthService.getAccessToken (accessTokenFound: { token in
                 self.socket?.emit("authenticate", ["token": token])
@@ -152,7 +152,7 @@ open class NotesService {
             }
             
             self.socket?.on(clientEvent:  .disconnect) {data, ack in
-                self.connected = false;
+                self.authenticated = false;
                 self.socket?.connect()
             }
             
@@ -162,7 +162,13 @@ open class NotesService {
     private func monitorOnlineStatus() {
         self.monitor.pathUpdateHandler = { path in
             if (path.status == .satisfied) {
-                self.socket?.connect()
+                if (self.authenticated) {
+                    self.socket?.connect()
+                } else {
+                    AuthService.getAccessToken(accessTokenFound: {token in
+                        self.connectToSocket(token: token)
+                    }, noAccessToken: {})
+                }
                 self.online = true
             } else {
                 self.online = false

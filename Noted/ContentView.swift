@@ -56,7 +56,7 @@ struct ContentView: View {
                     LoggedOutView(onLoggedIn: { token in
                         self.loggedIn = true
                         self.initialised = false
-                        self.notes.connectToSocket(token: token, context: self.viewContext)
+                        self.notes.connectToSocket(token: token)
                     })
                 }
             } else {
@@ -68,7 +68,12 @@ struct ContentView: View {
             }
         }.onAppear {
             if(AuthService.hasCredentials()) {
-                self.authenticate()
+                if(self.notes.online) {
+                    self.authenticate()
+                } else {
+                    self.loggedIn = true
+                    self.initialised = true
+                }
             } else {
                 self.initialised = true
             }
@@ -149,7 +154,7 @@ struct ContentView: View {
         Timer.scheduledTimer(withTimeInterval: 1, repeats: false, block: {_ in
             AuthService.getAccessToken(accessTokenFound: {
                 token in
-                self.notes.connectToSocket(token: token, context: self.viewContext)
+                self.notes.connectToSocket(token: token)
                 self.loggedIn = true
             }, noAccessToken: {
                 self.loggedIn = false
