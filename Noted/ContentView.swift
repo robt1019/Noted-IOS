@@ -69,6 +69,8 @@ struct ContentView: View {
         }.onAppear {
             if(AuthService.hasCredentials()) {
                 if(self.notes.online) {
+                    self.loggedIn = false
+                    self.initialised = false
                     self.authenticate()
                 } else {
                     self.loggedIn = true
