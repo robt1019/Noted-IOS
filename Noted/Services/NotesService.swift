@@ -128,7 +128,7 @@ open class NotesService {
             
             AuthService.getAccessToken (accessTokenFound: { token in
                 self.socket?.emit("authenticate", ["token": token])
-            }, noAccessToken: {})
+            }, noAccessToken: {}, forceLogin: true)
             
             self.socket?.once("authenticated", callback: { _, _ in
                 
@@ -167,7 +167,7 @@ open class NotesService {
                 } else {
                     AuthService.getAccessToken(accessTokenFound: {token in
                         self.connectToSocket(token: token)
-                    }, noAccessToken: {})
+                    }, noAccessToken: {}, forceLogin: false)
                 }
                 self.online = true
             } else {

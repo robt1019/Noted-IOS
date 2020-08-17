@@ -16,7 +16,7 @@ struct LoggedOutView: View {
         Button(action: {
             AuthService.getAccessToken(accessTokenFound: {token in
                 self.onLoggedIn(token)
-            }, noAccessToken: {})
+            }, noAccessToken: {}, forceLogin: true)
         }) {
             Text("Login")
         }

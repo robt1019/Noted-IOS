@@ -47,27 +47,32 @@ class AuthService {
         }
     }
     
-    static func getAccessToken(accessTokenFound: @escaping (String) -> Void, noAccessToken: @escaping () -> Void) {
+    static func getAccessToken(accessTokenFound: @escaping (String) -> Void, noAccessToken: @escaping () -> Void, forceLogin: Bool) {
         let credentialsManager = CredentialsManager(authentication: Auth0.authentication())
         if(credentialsManager.hasValid()) {
             credentialsManager.credentials(callback: {err, credentials in
                 if(err != nil) {
-                    login(onSuccess: {  credentials in
-                        credentialsManager.store(credentials: credentials)
-                        accessTokenFound(credentials.accessToken!)
-                    }, onFailure: {
+                    if(forceLogin) {
+                        login(onSuccess: {  credentials in
+                            credentialsManager.store(credentials: credentials)
+                            accessTokenFound(credentials.accessToken!)
+                        }, onFailure: {
+                            noAccessToken()
+                        })
+                    } else {
                         noAccessToken()
-                    })
+                    }
                 } else {
                     accessTokenFound((credentials?.accessToken)!)
                 }
             })
         } else {
-            let credentialsManager = CredentialsManager(authentication: Auth0.authentication())
-            login(onSuccess: {  credentials in
-                credentialsManager.store(credentials: credentials)
-                accessTokenFound(credentials.accessToken!)
-            }, onFailure: {})
+            if(forceLogin) {
+                login(onSuccess: {  credentials in
+                    credentialsManager.store(credentials: credentials)
+                    accessTokenFound(credentials.accessToken!)
+                }, onFailure: {})
+            }
         }
     }
 }

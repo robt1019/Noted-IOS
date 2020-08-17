@@ -160,7 +160,7 @@ struct ContentView: View {
                 self.loggedIn = true
             }, noAccessToken: {
                 self.loggedIn = false
-            })
+            }, forceLogin: false)
         })
     }
 }
