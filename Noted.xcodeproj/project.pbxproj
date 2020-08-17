@@ -71,7 +71,7 @@
 		EC7BF67A24DC5A27004D8793 /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
 		EC8A078024EAD38A001EEFF7 /* Development.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Development.xcconfig; sourceTree = "<group>"; };
 		EC8A078124EAD39E001EEFF7 /* Production.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Production.xcconfig; sourceTree = "<group>"; };
-		EC98ABC024DBFF3C00265A10 /* Noted.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Noted.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC98ABC024DBFF3C00265A10 /* Noated.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Noated.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC98ABC324DBFF3C00265A10 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EC98ABC624DBFF3C00265A10 /* Noted.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Noted.xcdatamodel; sourceTree = "<group>"; };
 		EC98ABC824DBFF3C00265A10 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -196,7 +196,7 @@
 		EC98ABC124DBFF3C00265A10 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				EC98ABC024DBFF3C00265A10 /* Noted.app */,
+				EC98ABC024DBFF3C00265A10 /* Noated.app */,
 				EC98ABDB24DBFF3D00265A10 /* NotedTests.xctest */,
 				EC98ABE624DBFF3D00265A10 /* NotedUITests.xctest */,
 			);
@@ -268,7 +268,7 @@
 			);
 			name = Noted;
 			productName = Noted;
-			productReference = EC98ABC024DBFF3C00265A10 /* Noted.app */;
+			productReference = EC98ABC024DBFF3C00265A10 /* Noated.app */;
 			productType = "com.apple.product-type.application";
 		};
 		EC98ABDA24DBFF3D00265A10 /* NotedTests */ = {
@@ -555,7 +555,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Noted/Preview Content\"";
 				DEVELOPMENT_TEAM = A5C9J78U4Q;
 				ENABLE_PREVIEWS = YES;
@@ -565,9 +565,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.2;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.myware.Noted;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Noated;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -682,7 +682,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Noted/Preview Content\"";
 				DEVELOPMENT_TEAM = A5C9J78U4Q;
 				ENABLE_PREVIEWS = YES;
@@ -692,9 +692,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.2;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.myware.Noted;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Noated;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -864,7 +864,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Noted/Preview Content\"";
 				DEVELOPMENT_TEAM = A5C9J78U4Q;
 				ENABLE_PREVIEWS = YES;
@@ -874,9 +874,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.2;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.myware.Noted;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Noated;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -888,7 +888,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_ASSET_PATHS = "\"Noted/Preview Content\"";
 				DEVELOPMENT_TEAM = A5C9J78U4Q;
 				ENABLE_PREVIEWS = YES;
@@ -898,9 +898,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.2;
+				MARKETING_VERSION = 0.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.myware.Noted;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Noated;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
