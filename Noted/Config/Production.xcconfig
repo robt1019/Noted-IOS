@@ -1,0 +1,16 @@
+//
+//  Production.xcconfig
+//  Noted
+//
+//  Created by Robert Taylor on 17/08/2020.
+//  Copyright © 2020 Myware. All rights reserved.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+#include "Pods/Target Support Files/Pods-Noted/Pods-Noted.release (prod).xcconfig"
+
+AUTH0_DOMAIN = noated.eu.auth0.com
+AUTH0_CLIENT_ID = vDY6qJcS3YD4QEWIfQnGOeLPgEKtcVfx
+NOTES_API = https:/$()/fierce-everglades-58543.herokuapp.com

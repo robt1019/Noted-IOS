@@ -1,4 +1,4 @@
-//
+    //
 //  AuthService.swift
 //  Noted
 //
@@ -12,15 +12,15 @@ import Auth0
 class AuthService {
     
     static func hasCredentials() -> Bool {
-        let credentialsManager = CredentialsManager(authentication: Auth0.authentication())
+        let credentialsManager = CredentialsManager(authentication: Auth0.authentication(clientId: infoForKey("Auth0 clientid")!, domain: infoForKey("Auth0 domain")!))
         return credentialsManager.hasValid()
     }
     
     static func login(onSuccess: @escaping (Credentials) -> Void, onFailure: @escaping () -> Void) {
         Auth0
-            .webAuth()
+            .webAuth(clientId: infoForKey("Auth0 clientid")!, domain: infoForKey("Auth0 domain")!)
             .scope("openid offline_access")
-            .audience("https://glacial-badlands-85832.herokuapp.com")
+            .audience(infoForKey("Notes API")!)
             .start {
                 switch $0 {
                 case .failure(let error):
@@ -33,10 +33,10 @@ class AuthService {
     }
     
     static func logout(loggedOut: @escaping () -> Void, failed: @escaping () -> Void) {
-        let credentialsManager = CredentialsManager(authentication: Auth0.authentication())
+        let credentialsManager = CredentialsManager(authentication: Auth0.authentication(clientId: infoForKey("Auth0 clientid")!, domain: infoForKey("Auth0 domain")!))
         credentialsManager.clear()
         Auth0
-            .webAuth()
+            .webAuth(clientId: infoForKey("Auth0 clientid")!, domain: infoForKey("Auth0 domain")!)
             .clearSession(federated:false) {
                 switch $0 {
                 case true:
@@ -48,7 +48,7 @@ class AuthService {
     }
     
     static func getAccessToken(accessTokenFound: @escaping (String) -> Void, noAccessToken: @escaping () -> Void, forceLogin: Bool) {
-        let credentialsManager = CredentialsManager(authentication: Auth0.authentication())
+        let credentialsManager = CredentialsManager(authentication: Auth0.authentication(clientId: infoForKey("Auth0 clientid")!, domain: infoForKey("Auth0 domain")!))
         if(credentialsManager.hasValid()) {
             credentialsManager.credentials(callback: {err, credentials in
                 if(err != nil) {

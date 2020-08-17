@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>Auth0 clientid</key>
+	<string>$(AUTH0_CLIENT_ID)</string>
+	<key>Auth0 domain</key>
+	<string>$(AUTH0_DOMAIN)</string>
+	<key>Notes API</key>
+	<string>$(NOTES_API)</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

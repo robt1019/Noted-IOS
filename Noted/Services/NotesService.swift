@@ -98,7 +98,7 @@ open class NotesService {
         
         self.socket?.disconnect()
         
-        self.socketManager = SocketManager(socketURL: URL(string: "https://glacial-badlands-85832.herokuapp.com")!, config: [.log(false), .compress])
+        self.socketManager = SocketManager(socketURL: URL(string: infoForKey("Notes API")!)!, config: [.log(false), .compress])
         self.socket = self.socketManager?.defaultSocket
         
         self.socket?.connect()

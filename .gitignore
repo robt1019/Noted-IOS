@@ -20,4 +20,4 @@ DerivedData
 *.xccheckout
 *.xcworkspace
 !default.xcworkspace
-Noted/Config/*
+Noted/Config
