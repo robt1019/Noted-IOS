@@ -16,13 +16,13 @@ struct NotesView: View {
     @Environment(\.managedObjectContext)
     var viewContext
     
-    let onNoteUpdated: (String, String, String) -> Void
+    let onNoteUpdated: (String, String, String, String, String) -> Void
     
     var body: some View {
         List {
             ForEach(self.notes, id: \.self) { (note: Note) in
-                NavigationLink(destination: NoteView(note: note, onNoteUpdated: { id, title, body in
-                    self.onNoteUpdated(id, title, body)
+                NavigationLink(destination: NoteView(note: note, onNoteUpdated: { prevTitle, prevBody, id, title, body in
+                    self.onNoteUpdated(prevTitle, prevBody, id, title, body)
                 })) {
                     Text(note.title!)
                 }

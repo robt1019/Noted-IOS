@@ -50,9 +50,9 @@ open class NotesService {
         }
     }
     
-    public func updateNote(id: String, title: String, body: String, prevNote: Note, context: NSManagedObjectContext) {
-        let titleDiff = NotesDiffer.shared.diff(notes1: prevNote.title!, notes2: title)
-        let bodyDiff = NotesDiffer.shared.diff(notes1: prevNote.body!, notes2: body)
+    public func updateNote(prevTitle: String, prevBody: String, id: String, title: String, body: String, context: NSManagedObjectContext) {
+        let titleDiff = NotesDiffer.shared.diff(notes1: prevTitle, notes2: title)
+        let bodyDiff = NotesDiffer.shared.diff(notes1: prevBody, notes2: body)
         let payload: [String: Any] = [
             "id": id,
             "title": titleDiff,

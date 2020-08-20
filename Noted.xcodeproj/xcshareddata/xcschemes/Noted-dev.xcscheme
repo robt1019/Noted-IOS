@@ -39,7 +39,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EC98ABBF24DBFF3C00265A10"
-            BuildableName = "Noted.app"
+            BuildableName = "Noated.app"
             BlueprintName = "Noted"
             ReferencedContainer = "container:Noted.xcodeproj">
          </BuildableReference>
@@ -55,7 +55,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EC98ABBF24DBFF3C00265A10"
-            BuildableName = "Noted.app"
+            BuildableName = "Noated.app"
             BlueprintName = "Noted"
             ReferencedContainer = "container:Noted.xcodeproj">
          </BuildableReference>

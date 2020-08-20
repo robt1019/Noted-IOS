@@ -20,10 +20,12 @@ struct NoteView: View {
     
     @State var noteTitle = ""
     @State var noteBody = ""
+    @State var prevTitle = ""
+    @State var prevBody = ""
     
     @State var navBarHidden = true
     
-    let onNoteUpdated: (String, String, String) -> Void
+    let onNoteUpdated: (String, String, String, String, String) -> Void
     
     var body: some View {
         VStack (alignment: .leading) {
@@ -31,7 +33,7 @@ struct NoteView: View {
                 self.presentationMode.wrappedValue.dismiss()
             }) {
                 Image(systemName: "chevron.left")
-                Text("Notes")
+                Text("Done")
             }
             
             TextField("", text: $noteTitle)
@@ -50,12 +52,14 @@ struct NoteView: View {
         .onAppear {
             self.noteTitle = self.note.title!
             self.noteBody = self.note.body!
+            self.prevTitle = self.note.title!
+            self.prevBody = self.note.body!
         }
         .onDisappear {
-            self.onNoteUpdated(self.note.id!, self.noteTitle, self.noteBody)
+            self.onNoteUpdated(self.prevTitle, self.prevBody, self.note.id!, self.noteTitle, self.noteBody)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-            self.onNoteUpdated(self.note.id!, self.noteTitle, self.noteBody)
+            self.onNoteUpdated(self.prevTitle, self.prevBody, self.note.id!, self.noteTitle, self.noteBody)
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
             self.navBarHidden = true

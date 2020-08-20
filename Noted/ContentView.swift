@@ -28,8 +28,8 @@ struct ContentView: View {
             if (self.initialised) {
                 if (self.loggedIn) {
                     NavigationView {
-                        NotesView(onNoteUpdated: { id, title, body in
-                            self.updateNote(id: id, title: title, body: body)
+                        NotesView(onNoteUpdated: { prevTitle, prevBody, id, title, body in
+                            self.updateNote(prevTitle: prevTitle, prevBody: prevBody, id: id, title: title, body: body)
                         })
                             .navigationBarTitle(Text("Notes"))
                             .navigationBarItems(
@@ -90,10 +90,8 @@ struct ContentView: View {
         self.notes.createNote(id: UUID().uuidString, title: "New...", body: "Body...", context: self.viewContext)
     }
     
-    func updateNote(id: String, title: String, body: String) {
-        let prevNote = Note.noteById(id: id, in: self.viewContext)
-            self.notes.updateNote(id: id, title: title, body: body, prevNote: prevNote!, context: self.viewContext)
-        
+    func updateNote(prevTitle: String, prevBody: String, id: String, title: String, body: String) {
+        self.notes.updateNote(prevTitle: prevTitle, prevBody: prevBody, id: id, title: title, body: body, context: self.viewContext)
     }
     
     func listenForNoteCreations() {
