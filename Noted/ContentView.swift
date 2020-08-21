@@ -131,14 +131,10 @@ struct ContentView: View {
                 let newServerNote = initialNotes[noteId]
                 let note = Note.noteById(id: noteId, in: self.viewContext)  
                 if (note != nil) {
-                    if (note!.title != newServerNote?.title) {
-                        let newTitle = NotesDiffer.shared.patch(notes1: note!.title!, diff: NotesDiffer.shared.diff(notes1: note!.title!, notes2: newServerNote!.title))
-                        Note.updateTitle(note: note!, title: newTitle, in: self.viewContext)
-                    }
-                    if (note!.body != newServerNote?.body) {
-                        let newBody = NotesDiffer.shared.patch(notes1: note!.body!, diff: NotesDiffer.shared.diff(notes1: note!.body!, notes2: newServerNote!.body))
-                        Note.updateBody(note: note!, body: newBody, in: self.viewContext)
-                    }
+                    let newTitle = NotesDiffer.shared.patch(notes1: note!.title!, diff: NotesDiffer.shared.diff(notes1: note!.title!, notes2: newServerNote!.title))
+                    let newBody = NotesDiffer.shared.patch(notes1: note!.body!, diff: NotesDiffer.shared.diff(notes1: note!.body!, notes2: newServerNote!.body))
+                    Note.updateTitle(note: note!, title: newTitle, in: self.viewContext)
+                    Note.updateBody(note: note!, body: newBody, in: self.viewContext)
                 } else {
                     Note.create(in: self.viewContext, noteId: noteId, title: newServerNote?.title, body: newServerNote?.body)
                 }
