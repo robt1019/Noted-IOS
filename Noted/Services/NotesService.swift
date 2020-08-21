@@ -42,11 +42,16 @@ open class NotesService {
             "title": title,
             "body": body,
         ]
-        if (self.online) {
-            self.socket?.emit("createNote", payload)
-        } else {
-            Note.create(in: context, noteId: id, title: title, body: body)
-            OfflineChanges.createNote(payload: payload)
+        var serverGotTheMessage = false
+        self.socket?.emitWithAck("createNote", payload).timingOut(after: 0) { _ in
+            serverGotTheMessage = true
+        }
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: false) {_ in
+            if(!serverGotTheMessage) {
+                Note.create(in: context, noteId: id, title: title, body: body)
+                OfflineChanges.createNote(payload: payload)
+                self.socket?.connect()
+            }
         }
     }
     
@@ -58,23 +63,37 @@ open class NotesService {
             "title": titleDiff,
             "body": bodyDiff,
         ]
-        if (self.online) {
-            self.socket?.emit("updateNote", payload)
-        } else {
-            let note = Note.noteById(id: id, in: context)
-            Note.updateTitle(note: note!, title: title, in: context)
-            Note.updateBody(note: note!, body: body, in: context)
-            OfflineChanges.updateNote(payload: payload)
+        var serverGotTheMessage = false
+        self.socket?.emitWithAck("updateNote", payload).timingOut(after: 0) { _ in
+            serverGotTheMessage = true;
+        }
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: false) {_ in
+            if(!serverGotTheMessage) {
+                print("server did not get the message :( ")
+                let note = Note.noteById(id: id, in: context)
+                Note.updateTitle(note: note!, title: title, in: context)
+                Note.updateBody(note: note!, body: body, in: context)
+                OfflineChanges.updateNote(payload: payload)
+                self.socket?.connect()
+            }
         }
     }
     
     public func deleteNote(id: String, context: NSManagedObjectContext) {
-        if (self.online) {
-            self.socket?.emit("deleteNote", id)
-        } else {
-            let note = Note.noteById(id: id, in: context)
-            Note.deleteNote(note: note!, in: context)
-            OfflineChanges.deleteNote(payload: id)
+        
+        var serverGotTheMessage = false
+    
+        self.socket?.emitWithAck("deleteNote", id).timingOut(after: 0) { _ in
+            serverGotTheMessage = true
+        }
+    
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { _ in
+            if(!serverGotTheMessage) {
+                let note = Note.noteById(id: id, in: context)
+                Note.deleteNote(note: note!, in: context)
+                OfflineChanges.deleteNote(payload: id)
+                self.socket?.connect()
+            }
         }
     }
     
